@@ -30,6 +30,9 @@ function openPaymentModal(itemName, itemPrice) {
     
     // Gerar QR Code
     generateQRCode();
+    
+    // Registrar tentativa de pagamento
+    logPaymentAttempt(itemName, itemPrice);
 }
 
 function closePaymentModal() {
@@ -70,4 +73,25 @@ window.onclick = function(event) {
     if (event.target === modal) {
         closePaymentModal();
     }
+}
+
+
+// Registrar tentativa de pagamento no Firebase
+async function logPaymentAttempt(itemName, itemPrice) {
+    const user = JSON.parse(localStorage.getItem('stumbleUser'));
+    
+    if (!user) return;
+    
+    const newPayment = {
+        userName: user.displayName,
+        userEmail: user.email,
+        itemName: itemName,
+        itemPrice: itemPrice,
+        timestamp: Date.now(),
+        status: 'pending'
+    };
+    
+    // Salvar no Firebase
+    const paymentsRef = window.firebaseRef(window.firebaseDB, 'payments');
+    await window.firebasePush(paymentsRef, newPayment);
 }

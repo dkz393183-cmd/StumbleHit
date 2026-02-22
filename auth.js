@@ -1,16 +1,4 @@
-// Configuração do Firebase
-const firebaseConfig = {
-    apiKey: "SUA_API_KEY_AQUI",
-    authDomain: "stumblehit.firebaseapp.com",
-    projectId: "stumblehit",
-    storageBucket: "stumblehit.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "SUA_APP_ID_AQUI"
-};
-
-// Inicializar Firebase (será feito quando você configurar)
-let auth = null;
-let googleProvider = null;
+// Firebase já está configurado no firebase-config.js
 
 // Verificar se usuário está logado
 function checkAuth() {
@@ -121,7 +109,7 @@ function loginWithEmail() {
 }
 
 // Cadastro com email e senha
-function signupWithEmail() {
+async function signupWithEmail() {
     const name = document.getElementById('signupName').value;
     const email = document.getElementById('signupEmail').value;
     const password = document.getElementById('signupPassword').value;
@@ -142,36 +130,61 @@ function signupWithEmail() {
         return;
     }
 
-    // Salvar usuário (simulado - em produção use Firebase)
-    const users = JSON.parse(localStorage.getItem('stumbleUsers') || '[]');
-    
-    if (users.find(u => u.email === email)) {
-        alert('Este email já está cadastrado!');
+    // Verificar se Firebase está disponível
+    if (!window.firebaseDB) {
+        alert('Aguarde, carregando...');
+        setTimeout(signupWithEmail, 500);
         return;
     }
 
-    users.push({ name, email, password });
-    localStorage.setItem('stumbleUsers', JSON.stringify(users));
-
-    const userData = {
-        displayName: name,
-        email: email,
-        photoURL: null
-    };
-    localStorage.setItem('stumbleUser', JSON.stringify(userData));
-    updateUserIcon(userData);
+    // Verificar se email já existe no Firebase
+    const usersRef = window.firebaseRef(window.firebaseDB, 'users');
     
-    // Se estiver na página de login, mostrar perfil
-    if (window.location.pathname.includes('login.html')) {
-        if (typeof showUserProfile === 'function') {
-            showUserProfile();
-        } else {
-            window.location.href = 'index.html';
+    window.firebaseOnValue(usersRef, async (snapshot) => {
+        let emailExists = false;
+        snapshot.forEach((childSnapshot) => {
+            if (childSnapshot.val().email === email) {
+                emailExists = true;
+            }
+        });
+        
+        if (emailExists) {
+            alert('Este email já está cadastrado!');
+            return;
         }
-    } else {
-        closeAuthModal();
-        alert('Conta criada com sucesso! 🎉');
-    }
+
+        // Salvar usuário no Firebase
+        const newUserRef = window.firebasePush(usersRef);
+        const userData = {
+            name: name,
+            email: email,
+            password: password,
+            registeredAt: Date.now()
+        };
+        await window.firebaseSet(newUserRef, userData);
+        
+        // Salvar sessão local
+        const userSession = {
+            displayName: name,
+            email: email,
+            photoURL: null,
+            registeredAt: Date.now()
+        };
+        localStorage.setItem('stumbleUser', JSON.stringify(userSession));
+        updateUserIcon(userSession);
+        
+        // Se estiver na página de login, mostrar perfil
+        if (window.location.pathname.includes('login.html')) {
+            if (typeof showUserProfile === 'function') {
+                showUserProfile();
+            } else {
+                window.location.href = 'index.html';
+            }
+        } else {
+            closeAuthModal();
+            alert('Conta criada com sucesso! 🎉');
+        }
+    }, { onlyOnce: true });
 }
 
 // Login com Google (OAuth real)
@@ -362,8 +375,11 @@ function saveProfileModal() {
 
 // Logout
 function logout() {
-    localStorage.removeItem('stumbleUser');
-    location.reload();
+    if (confirm('Tem certeza que deseja sair?')) {
+        localStorage.removeItem('stumbleUser');
+        localStorage.removeItem('stumbleUserLastActive');
+        location.reload();
+    }
 }
 
 // Verificar autenticação ao carregar a página

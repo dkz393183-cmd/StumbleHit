@@ -1,89 +1,40 @@
-// Sistema de chat público em tempo real
+// Sistema de chat público em tempo real com Firebase
 let chatOpen = false;
 let chatMessages = [];
-let lastMessageId = 0;
-let updateInterval = null;
-
-// URL da API JSONBin (banco de dados gratuito em tempo real)
-const CHAT_API = 'https://api.jsonbin.io/v3/b/CHAT_BIN_ID';
-const API_KEY = '$2a$10$YOUR_API_KEY'; // Será criado automaticamente
+let chatListener = null;
 
 // Inicializar chat
-async function initChat() {
-    // Tentar carregar do localStorage primeiro (backup)
-    const saved = localStorage.getItem('stumbleChat');
-    if (saved) {
-        try {
-            chatMessages = JSON.parse(saved);
-        } catch (e) {
-            chatMessages = [];
-        }
-    }
-    
-    // Carregar mensagens do servidor
-    await loadMessagesFromServer();
+function initChat() {
+    // Carregar mensagens do Firebase
+    loadChatMessagesFromFirebase();
 }
 
-// Carregar mensagens do servidor
-async function loadMessagesFromServer() {
-    try {
-        // Usar localStorage como banco de dados compartilhado simulado
-        // Em produção real, use Firebase, Supabase ou similar
-        const response = await fetch('https://api.jsonbin.io/v3/b/67890xyz', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).catch(() => null);
+// Carregar mensagens do Firebase em tempo real
+function loadChatMessagesFromFirebase() {
+    if (!window.firebaseDB) {
+        console.log('Aguardando Firebase...');
+        setTimeout(loadChatMessagesFromFirebase, 500);
+        return;
+    }
+    
+    const messagesRef = window.firebaseRef(window.firebaseDB, 'chat/messages');
+    const messagesQuery = window.firebaseQuery(messagesRef, window.firebaseOrderByChild('timestamp'), window.firebaseLimitToLast(100));
+    
+    // Listener em tempo real
+    chatListener = window.firebaseOnValue(messagesQuery, (snapshot) => {
+        chatMessages = [];
+        snapshot.forEach((childSnapshot) => {
+            chatMessages.push(childSnapshot.val());
+        });
         
-        if (response && response.ok) {
-            const data = await response.json();
-            chatMessages = data.record?.messages || [];
-        } else {
-            // Fallback: usar localStorage compartilhado via evento
-            const stored = localStorage.getItem('stumbleChatGlobal');
-            if (stored) {
-                chatMessages = JSON.parse(stored);
-            }
-        }
+        // Limpar mensagens antigas (mais de 7 dias)
+        const sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+        chatMessages = chatMessages.filter(msg => msg.timestamp > sevenDaysAgo);
         
         if (chatOpen) {
             renderMessages();
         }
-    } catch (error) {
-        console.log('Usando modo local');
-        // Usar localStorage como fallback
-        const stored = localStorage.getItem('stumbleChatGlobal');
-        if (stored) {
-            chatMessages = JSON.parse(stored);
-        }
-    }
-}
-
-// Salvar mensagens no servidor
-async function saveMessagesToServer() {
-    try {
-        // Salvar no localStorage global
-        localStorage.setItem('stumbleChatGlobal', JSON.stringify(chatMessages));
-        
-        // Disparar evento para outras abas
-        window.dispatchEvent(new StorageEvent('storage', {
-            key: 'stumbleChatGlobal',
-            newValue: JSON.stringify(chatMessages)
-        }));
-        
-        // Tentar salvar no servidor (opcional)
-        fetch('https://api.jsonbin.io/v3/b/67890xyz', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ messages: chatMessages })
-        }).catch(() => {});
-        
-    } catch (error) {
-        console.log('Salvando localmente');
-    }
+    });
 }
 
 // Abrir/Fechar chat
@@ -94,9 +45,7 @@ function toggleChat() {
     if (chatOpen) {
         chatBox.style.display = 'flex';
         chatBox.style.animation = 'slideInLeft 0.3s ease-out';
-        initChat();
         renderMessages();
-        startRealtimeUpdates();
         
         // Scroll para o final
         setTimeout(() => {
@@ -105,7 +54,6 @@ function toggleChat() {
         }, 100);
     } else {
         chatBox.style.animation = 'slideOutLeft 0.3s ease-out';
-        stopRealtimeUpdates();
         setTimeout(() => {
             chatBox.style.display = 'none';
         }, 300);
@@ -161,7 +109,7 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-// Enviar mensagem
+// Enviar mensagem para Firebase
 async function sendMessage() {
     const user = JSON.parse(localStorage.getItem('stumbleUser'));
     
@@ -182,68 +130,27 @@ async function sendMessage() {
     }
     
     const newMessage = {
-        id: Date.now() + Math.random(),
         userId: user.email,
         userName: user.displayName,
-        photoURL: user.photoURL,
+        photoURL: user.photoURL || null,
         message: message,
         timestamp: Date.now()
     };
     
-    chatMessages.push(newMessage);
-    
-    // Limitar a 100 mensagens
-    if (chatMessages.length > 100) {
-        chatMessages = chatMessages.slice(-100);
-    }
-    
-    await saveMessagesToServer();
-    renderMessages();
+    // Salvar no Firebase
+    const messagesRef = window.firebaseRef(window.firebaseDB, 'chat/messages');
+    await window.firebasePush(messagesRef, newMessage);
     
     input.value = '';
-}
-
-// Iniciar atualizações em tempo real
-function startRealtimeUpdates() {
-    // Atualizar a cada 2 segundos
-    updateInterval = setInterval(async () => {
-        if (chatOpen) {
-            const oldLength = chatMessages.length;
-            await loadMessagesFromServer();
-            
-            // Se houver novas mensagens, renderizar
-            if (chatMessages.length !== oldLength) {
-                renderMessages();
-            }
-        }
-    }, 2000);
     
-    // Listener para mudanças em outras abas
-    window.addEventListener('storage', handleStorageChange);
+    // Scroll para o final
+    setTimeout(() => {
+        const container = document.getElementById('chatMessages');
+        container.scrollTop = container.scrollHeight;
+    }, 100);
 }
 
-// Parar atualizações em tempo real
-function stopRealtimeUpdates() {
-    if (updateInterval) {
-        clearInterval(updateInterval);
-        updateInterval = null;
-    }
-    window.removeEventListener('storage', handleStorageChange);
-}
-
-// Lidar com mudanças de storage (outras abas)
-function handleStorageChange(e) {
-    if (e.key === 'stumbleChatGlobal' && e.newValue) {
-        try {
-            chatMessages = JSON.parse(e.newValue);
-            if (chatOpen) {
-                renderMessages();
-            }
-        } catch (error) {
-            console.log('Erro ao processar mensagem');
-        }
-    }
-}
+// Funções removidas - Firebase faz tudo automaticamente em tempo real!
 
 // Listener para Enter
 document.addEventListener('DOMContentLoaded', function() {
@@ -257,22 +164,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Inicializar chat
-    initChat();
-});
-
-// Limpar mensagens antigas (mais de 24h)
-function cleanOldMessages() {
-    const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000);
-    const oldLength = chatMessages.length;
-    chatMessages = chatMessages.filter(msg => msg.timestamp > oneDayAgo);
-    
-    if (chatMessages.length !== oldLength) {
-        saveMessagesToServer();
+    // Inicializar chat quando Firebase estiver pronto
+    if (window.firebaseDB) {
+        initChat();
+    } else {
+        setTimeout(initChat, 1000);
     }
-}
-
-// Limpar mensagens antigas ao carregar
-cleanOldMessages();
-setInterval(cleanOldMessages, 60000); // Verificar a cada minuto
+});
 
