@@ -101,17 +101,34 @@ function renderMessages() {
                         </div>
                     ` : ''}
                     
-                    <div style="background: ${isOwn ? 'linear-gradient(135deg, #667eea, #764ba2)' : '#f0f0f0'}; color: ${isOwn ? 'white' : '#333'}; padding: 10px 15px; border-radius: 15px; border: 2px solid #000; word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: relative;">
+                    <div class="chat-message-bubble" style="background: ${isOwn ? 'linear-gradient(135deg, #667eea, #764ba2)' : '#f0f0f0'}; color: ${isOwn ? 'white' : '#333'}; padding: 10px 15px; border-radius: 15px; border: 2px solid #000; word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: relative;">
                         ${escapeHtml(msg.message)}
-                        <div style="position: absolute; top: 5px; right: 5px; display: flex; gap: 5px;">
-                            <button onclick="replyToMessage('${messageId}', '${msg.userName.replace(/'/g, "\\'")}', '${escapeHtml(msg.message).replace(/'/g, "\\'")}', event)" style="background: rgba(0,0,0,0.2); border: none; color: ${isOwn ? 'white' : '#333'}; cursor: pointer; padding: 3px 6px; border-radius: 5px; font-size: 11px;" title="Responder">↩️</button>
-                            ${isOwn ? `<button onclick="deleteMessage('${messageId}', event)" style="background: rgba(255,0,0,0.3); border: none; color: white; cursor: pointer; padding: 3px 6px; border-radius: 5px; font-size: 11px;" title="Apagar">🗑️</button>` : ''}
+                        <div class="message-actions" style="position: absolute; top: 5px; right: 5px; display: none; gap: 5px;">
+                            <button onclick="replyToMessage('${messageId}', '${msg.userName.replace(/'/g, "\\'")}', '${escapeHtml(msg.message).replace(/'/g, "\\'")}', event)" style="background: rgba(0,0,0,0.3); border: none; color: white; cursor: pointer; padding: 3px 6px; border-radius: 5px; font-size: 11px; transition: background 0.2s;" title="Responder">↩️</button>
+                            ${isOwn ? `<button onclick="deleteMessage('${messageId}', event)" style="background: rgba(255,0,0,0.5); border: none; color: white; cursor: pointer; padding: 3px 6px; border-radius: 5px; font-size: 11px; transition: background 0.2s;" title="Apagar">🗑️</button>` : ''}
                         </div>
                     </div>
                 </div>
             </div>
         `;
     }).join('');
+    
+    // Adicionar eventos de hover
+    const messageBubbles = container.querySelectorAll('.chat-message-bubble');
+    messageBubbles.forEach(bubble => {
+        bubble.addEventListener('mouseenter', function() {
+            const actions = this.querySelector('.message-actions');
+            if (actions) {
+                actions.style.display = 'flex';
+            }
+        });
+        bubble.addEventListener('mouseleave', function() {
+            const actions = this.querySelector('.message-actions');
+            if (actions) {
+                actions.style.display = 'none';
+            }
+        });
+    });
     
     // Manter scroll na posição ou ir para o final se estava no final
     if (isAtBottom) {
