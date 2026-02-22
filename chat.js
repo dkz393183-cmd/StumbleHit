@@ -73,12 +73,17 @@ function renderMessages() {
     const currentScroll = container.scrollTop;
     const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 50;
     
-    container.innerHTML = chatMessages.map(msg => {
+    container.innerHTML = chatMessages.map((msg, index) => {
         const isOwn = user && msg.userId === user.email;
         const time = new Date(msg.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        const messageId = msg.id || msg.timestamp;
+        
+        // Verificar se é resposta
+        const isReply = msg.replyTo;
+        const replyMsg = isReply ? chatMessages.find(m => (m.id || m.timestamp) === msg.replyTo) : null;
         
         return `
-            <div style="margin-bottom: 15px; ${isOwn ? 'text-align: right;' : ''}">
+            <div style="margin-bottom: 15px; ${isOwn ? 'text-align: right;' : ''}" data-msg-id="${messageId}">
                 <div style="display: inline-block; max-width: 70%; text-align: left;">
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px; ${isOwn ? 'flex-direction: row-reverse;' : ''}">
                         ${msg.photoURL ? 
@@ -88,8 +93,20 @@ function renderMessages() {
                         <span style="font-weight: bold; color: #667eea; font-size: 14px;">${msg.userName}</span>
                         <span style="font-size: 11px; color: #999;">${time}</span>
                     </div>
-                    <div style="background: ${isOwn ? 'linear-gradient(135deg, #667eea, #764ba2)' : '#f0f0f0'}; color: ${isOwn ? 'white' : '#333'}; padding: 10px 15px; border-radius: 15px; border: 2px solid #000; word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                    
+                    ${isReply && replyMsg ? `
+                        <div style="background: rgba(0,0,0,0.1); padding: 5px 10px; border-radius: 8px; margin-bottom: 5px; border-left: 3px solid #667eea; font-size: 12px;">
+                            <div style="font-weight: bold; color: #667eea; margin-bottom: 2px;">↩️ ${replyMsg.userName}</div>
+                            <div style="color: #666; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(replyMsg.message)}</div>
+                        </div>
+                    ` : ''}
+                    
+                    <div style="background: ${isOwn ? 'linear-gradient(135deg, #667eea, #764ba2)' : '#f0f0f0'}; color: ${isOwn ? 'white' : '#333'}; padding: 10px 15px; border-radius: 15px; border: 2px solid #000; word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: relative;">
                         ${escapeHtml(msg.message)}
+                        <div style="position: absolute; top: 5px; right: 5px; display: flex; gap: 5px;">
+                            <button onclick="replyToMessage('${messageId}', '${msg.userName.replace(/'/g, "\\'")}', '${escapeHtml(msg.message).replace(/'/g, "\\'")}', event)" style="background: rgba(0,0,0,0.2); border: none; color: ${isOwn ? 'white' : '#333'}; cursor: pointer; padding: 3px 6px; border-radius: 5px; font-size: 11px;" title="Responder">↩️</button>
+                            ${isOwn ? `<button onclick="deleteMessage('${messageId}', event)" style="background: rgba(255,0,0,0.3); border: none; color: white; cursor: pointer; padding: 3px 6px; border-radius: 5px; font-size: 11px;" title="Apagar">🗑️</button>` : ''}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -107,6 +124,78 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+// Variável global para armazenar mensagem sendo respondida
+let replyingTo = null;
+
+// Responder mensagem
+function replyToMessage(messageId, userName, messageText, event) {
+    event.stopPropagation();
+    
+    replyingTo = {
+        id: messageId,
+        userName: userName,
+        message: messageText
+    };
+    
+    const input = document.getElementById('chatInput');
+    const replyIndicator = document.getElementById('replyIndicator');
+    
+    if (!replyIndicator) {
+        const indicator = document.createElement('div');
+        indicator.id = 'replyIndicator';
+        indicator.style.cssText = 'background: #f0f0f0; padding: 8px 12px; border-radius: 8px; margin-bottom: 5px; border-left: 3px solid #667eea; display: flex; justify-content: space-between; align-items: center;';
+        indicator.innerHTML = `
+            <div style="flex: 1; overflow: hidden;">
+                <div style="font-weight: bold; color: #667eea; font-size: 12px; margin-bottom: 2px;">↩️ Respondendo ${userName}</div>
+                <div style="color: #666; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${messageText}</div>
+            </div>
+            <button onclick="cancelReply()" style="background: none; border: none; color: #999; cursor: pointer; font-size: 18px; padding: 0 5px;">×</button>
+        `;
+        input.parentElement.insertBefore(indicator, input);
+    } else {
+        replyIndicator.querySelector('div').innerHTML = `
+            <div style="font-weight: bold; color: #667eea; font-size: 12px; margin-bottom: 2px;">↩️ Respondendo ${userName}</div>
+            <div style="color: #666; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${messageText}</div>
+        `;
+    }
+    
+    input.focus();
+}
+
+// Cancelar resposta
+function cancelReply() {
+    replyingTo = null;
+    const replyIndicator = document.getElementById('replyIndicator');
+    if (replyIndicator) {
+        replyIndicator.remove();
+    }
+}
+
+// Apagar mensagem
+async function deleteMessage(messageId, event) {
+    event.stopPropagation();
+    
+    if (!confirm('Tem certeza que deseja apagar esta mensagem?')) {
+        return;
+    }
+    
+    // Encontrar a chave da mensagem no Firebase
+    const messagesRef = window.firebaseRef(window.firebaseDB, 'chat/messages');
+    
+    window.firebaseOnValue(messagesRef, async (snapshot) => {
+        snapshot.forEach((childSnapshot) => {
+            const msg = childSnapshot.val();
+            const msgId = msg.id || msg.timestamp;
+            
+            if (msgId == messageId) {
+                // Apagar do Firebase
+                const msgRef = window.firebaseRef(window.firebaseDB, `chat/messages/${childSnapshot.key}`);
+                window.firebaseSet(msgRef, null);
+            }
+        });
+    }, { onlyOnce: true });
 }
 
 // Enviar mensagem para Firebase
@@ -130,11 +219,13 @@ async function sendMessage() {
     }
     
     const newMessage = {
+        id: Date.now() + Math.random(),
         userId: user.email,
         userName: user.displayName,
         photoURL: user.photoURL || null,
         message: message,
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        replyTo: replyingTo ? replyingTo.id : null
     };
     
     // Salvar no Firebase
@@ -142,6 +233,7 @@ async function sendMessage() {
     await window.firebasePush(messagesRef, newMessage);
     
     input.value = '';
+    cancelReply();
     
     // Scroll para o final
     setTimeout(() => {
