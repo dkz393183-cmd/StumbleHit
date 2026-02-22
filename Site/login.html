@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Stumble Hit</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🎮</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .login-container {
+            max-width: 500px;
+            margin: 120px auto 50px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            border: 5px solid #000;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .login-title {
+            text-align: center;
+            font-size: 48px;
+            color: #667eea;
+            text-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+            margin-bottom: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 3px solid #000;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: 'Lilita One', cursive;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+            transform: scale(1.02);
+        }
+
+        .submit-button {
+            width: 100%;
+            background: linear-gradient(180deg, #00FF7F, #32CD32);
+            color: white;
+            border: 4px solid #000;
+            padding: 18px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 15px;
+            text-shadow: 3px 3px 0 #000;
+            box-shadow: 0 6px 0 #000;
+            transition: all 0.2s;
+            font-family: 'Lilita One', cursive;
+            margin-bottom: 20px;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 11px 0 #000;
+        }
+
+        .submit-button:active {
+            transform: translateY(2px);
+            box-shadow: 0 4px 0 #000;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            color: #666;
+            font-size: 18px;
+            position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 2px;
+            background: #ddd;
+        }
+
+        .divider::before {
+            left: 0;
+        }
+
+        .divider::after {
+            right: 0;
+        }
+
+        .google-button {
+            width: 100%;
+            background: white;
+            color: #333;
+            border: 4px solid #000;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 15px;
+            font-family: 'Lilita One', cursive;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.2s;
+            box-shadow: 0 5px 0 #000;
+            margin-bottom: 25px;
+        }
+
+        .google-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 0 #000;
+        }
+
+        .google-button:active {
+            transform: translateY(2px);
+            box-shadow: 0 3px 0 #000;
+        }
+
+        .google-button img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .switch-text {
+            text-align: center;
+            color: #666;
+            margin-top: 25px;
+            font-size: 16px;
+        }
+
+        .switch-link {
+            color: #667eea;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .switch-link:hover {
+            color: #FF6B9D;
+            text-decoration: underline;
+        }
+
+        .back-button {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .back-link {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            color: #FF6B9D;
+        }
+
+        .profile-container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid #000;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            font-size: 48px;
+            color: white;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .profile-name {
+            font-size: 32px;
+            color: #667eea;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+        }
+
+        .profile-email {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .logout-button {
+            background: linear-gradient(180deg, #FF6B6B, #FF0000);
+            color: white;
+            border: 4px solid #000;
+            padding: 15px 40px;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 15px;
+            text-shadow: 2px 2px 0 #000;
+            box-shadow: 0 6px 0 #000;
+            transition: all 0.2s;
+            font-family: 'Lilita One', cursive;
+        }
+
+        .logout-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 9px 0 #000;
+        }
+
+        .logout-button:active {
+            transform: translateY(2px);
+            box-shadow: 0 4px 0 #000;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-text">
+                <span class="logo-stumble">STUMBLE</span>
+                <span class="logo-hit">HIT</span>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">JOGAR</a></li>
+            <li><a href="loja.html">LOJA</a></li>
+            <li><a href="#hub">HUB</a></li>
+            <li><a href="#criadores">CRIADORES</a></li>
+            <li><a href="#novidades">NOVIDADES E DICAS</a></li>
+        </ul>
+        <div class="user-icon" onclick="window.location.href='login.html'">👤</div>
+    </nav>
+
+    <div class="login-container" id="loginContainer">
+        <!-- Formulário de Login -->
+        <div id="loginForm">
+            <h1 class="login-title">🔐 Entrar</h1>
+            
+            <div class="form-group">
+                <input type="email" id="loginEmail" placeholder="Email" class="form-input">
+            </div>
+            
+            <div class="form-group">
+                <input type="password" id="loginPassword" placeholder="Senha" class="form-input">
+            </div>
+
+            <button onclick="loginWithEmail()" class="submit-button">
+                ✓ Entrar
+            </button>
+
+            <div class="divider">ou</div>
+
+            <button onclick="loginWithGoogle()" class="google-button">
+                <img src="https://www.google.com/favicon.ico" alt="Google">
+                Entrar com Google
+            </button>
+
+            <p class="switch-text">
+                Não tem conta? <a href="#" onclick="showSignup(); return false;" class="switch-link">Cadastre-se</a>
+            </p>
+        </div>
+
+        <!-- Formulário de Cadastro -->
+        <div id="signupForm" style="display: none;">
+            <h1 class="login-title">📝 Criar Conta</h1>
+            
+            <div class="form-group">
+                <input type="text" id="signupName" placeholder="Nome" class="form-input">
+            </div>
+            
+            <div class="form-group">
+                <input type="email" id="signupEmail" placeholder="Email" class="form-input">
+            </div>
+            
+            <div class="form-group">
+                <input type="password" id="signupPassword" placeholder="Senha (mín. 6 caracteres)" class="form-input">
+            </div>
+            
+            <div class="form-group">
+                <input type="password" id="signupConfirmPassword" placeholder="Confirmar Senha" class="form-input">
+            </div>
+
+            <button onclick="signupWithEmail()" class="submit-button" style="background: linear-gradient(180deg, #FFE600, #FF9500);">
+                ✓ Criar Conta
+            </button>
+
+            <p class="switch-text">
+                Já tem conta? <a href="#" onclick="showLogin(); return false;" class="switch-link">Entrar</a>
+            </p>
+        </div>
+
+        <div class="back-button">
+            <a href="index.html" class="back-link">← Voltar para o início</a>
+        </div>
+    </div>
+
+    <div class="signature">Made by: b7</div>
+
+    <script src="auth.js"></script>
+    <script>
+        // Verificar se usuário já está logado ao carregar a página
+        window.addEventListener('load', function() {
+            const user = localStorage.getItem('stumbleUser');
+            if (user) {
+                showUserProfile();
+            }
+        });
+
+        function showUserProfile() {
+            const userData = JSON.parse(localStorage.getItem('stumbleUser'));
+            const container = document.getElementById('loginContainer');
+            
+            container.innerHTML = `
+                <div class="profile-container">
+                    <div class="profile-image-wrapper" style="position: relative; display: inline-block;">
+                        <div class="profile-image" id="profileImageDisplay">
+                            ${userData.photoURL ? 
+                                `<img src="${userData.photoURL}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">` : 
+                                userData.displayName.charAt(0)
+                            }
+                        </div>
+                        <button onclick="changeProfilePicture()" style="position: absolute; bottom: 0; right: 0; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: 3px solid #000; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.3);">
+                            📷
+                        </button>
+                    </div>
+                    <h2 class="profile-name" id="profileNameDisplay">${userData.displayName}</h2>
+                    <p class="profile-email">${userData.email}</p>
+                    ${userData.discord ? `<p class="profile-discord" style="color: #5865F2; font-size: 18px; margin-bottom: 20px;">🎮 ${userData.discord}</p>` : ''}
+                    
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;">
+                        <button onclick="editProfile()" style="background: linear-gradient(180deg, #FFE600, #FF9500); color: white; border: 3px solid #000; padding: 12px 25px; font-size: 18px; font-weight: bold; cursor: pointer; border-radius: 12px; font-family: 'Lilita One', cursive; text-shadow: 2px 2px 0 #000; box-shadow: 0 4px 0 #000; transition: all 0.2s;">
+                            ✏️ Editar Perfil
+                        </button>
+                        <button onclick="logout()" style="background: linear-gradient(180deg, #FF6B6B, #FF0000); color: white; border: 3px solid #000; padding: 12px 25px; font-size: 18px; font-weight: bold; cursor: pointer; border-radius: 12px; font-family: 'Lilita One', cursive; text-shadow: 2px 2px 0 #000; box-shadow: 0 4px 0 #000; transition: all 0.2s;">
+                            🚪 Sair
+                        </button>
+                    </div>
+                    
+                    <div class="back-button" style="margin-top: 30px;">
+                        <a href="index.html" class="back-link">← Voltar para o início</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function changeProfilePicture() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/png, image/jpeg, image/jpg, image/gif';
+            
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                // Verificar tamanho (máx 2MB)
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('A imagem deve ter no máximo 2MB!');
+                    return;
+                }
+                
+                // Ler arquivo e converter para base64
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const userData = JSON.parse(localStorage.getItem('stumbleUser'));
+                    userData.photoURL = event.target.result;
+                    localStorage.setItem('stumbleUser', JSON.stringify(userData));
+                    updateUserIcon(userData);
+                    showUserProfile();
+                };
+                reader.readAsDataURL(file);
+            };
+            
+            input.click();
+        }
+
+        function editProfile() {
+            const userData = JSON.parse(localStorage.getItem('stumbleUser'));
+            const container = document.getElementById('loginContainer');
+            
+            container.innerHTML = `
+                <div class="profile-container">
+                    <h1 class="login-title">✏️ Editar Perfil</h1>
+                    
+                    <div class="form-group">
+                        <label style="display: block; color: #667eea; font-size: 16px; margin-bottom: 8px; text-align: left;">Nome:</label>
+                        <input type="text" id="editName" value="${userData.displayName}" class="form-input">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: block; color: #667eea; font-size: 16px; margin-bottom: 8px; text-align: left;">Discord:</label>
+                        <input type="text" id="editDiscord" value="${userData.discord || ''}" placeholder="seu_usuario#1234" class="form-input">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: block; color: #667eea; font-size: 16px; margin-bottom: 8px; text-align: left;">Foto de Perfil:</label>
+                        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+                            <button onclick="uploadProfilePhoto()" style="background: linear-gradient(180deg, #667eea, #764ba2); color: white; border: 3px solid #000; padding: 12px 20px; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 10px; font-family: 'Lilita One', cursive; text-shadow: 2px 2px 0 #000; box-shadow: 0 4px 0 #000; transition: all 0.2s;">
+                                📁 Escolher Arquivo
+                            </button>
+                            <span id="fileNameDisplay" style="color: #666; font-size: 14px;">Nenhum arquivo selecionado</span>
+                        </div>
+                        ${userData.photoURL ? `<img src="${userData.photoURL}" style="width: 100px; height: 100px; border-radius: 50%; margin-top: 10px; border: 3px solid #000; object-fit: cover;">` : ''}
+                        <input type="file" id="photoFileInput" accept="image/png, image/jpeg, image/jpg, image/gif" style="display: none;">
+                    </div>
+                    
+                    <button onclick="saveProfile()" style="width: 100%; background: linear-gradient(180deg, #00FF7F, #32CD32); color: white; border: 4px solid #000; padding: 18px; font-size: 24px; font-weight: bold; cursor: pointer; border-radius: 15px; text-shadow: 3px 3px 0 #000; box-shadow: 0 6px 0 #000; transition: all 0.2s; font-family: 'Lilita One', cursive; margin-bottom: 15px;">
+                        ✓ Salvar Alterações
+                    </button>
+                    
+                    <button onclick="showUserProfile()" style="width: 100%; background: #f0f0f0; color: #333; border: 3px solid #000; padding: 15px; font-size: 18px; font-weight: bold; cursor: pointer; border-radius: 12px; font-family: 'Lilita One', cursive;">
+                        ✕ Cancelar
+                    </button>
+                </div>
+            `;
+        }
+
+        function uploadProfilePhoto() {
+            const input = document.getElementById('photoFileInput');
+            input.click();
+            
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                // Verificar tamanho (máx 2MB)
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('A imagem deve ter no máximo 2MB!');
+                    return;
+                }
+                
+                // Mostrar nome do arquivo
+                document.getElementById('fileNameDisplay').textContent = file.name;
+                
+                // Ler arquivo e converter para base64
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    // Atualizar preview
+                    const userData = JSON.parse(localStorage.getItem('stumbleUser'));
+                    userData.photoURL = event.target.result;
+                    localStorage.setItem('stumbleUser', JSON.stringify(userData));
+                    
+                    // Recarregar formulário para mostrar preview
+                    editProfile();
+                };
+                reader.readAsDataURL(file);
+            };
+        }
+
+        function saveProfile() {
+            const newName = document.getElementById('editName').value.trim();
+            const newDiscord = document.getElementById('editDiscord').value.trim();
+            
+            if (!newName) {
+                alert('O nome não pode estar vazio!');
+                return;
+            }
+            
+            const userData = JSON.parse(localStorage.getItem('stumbleUser'));
+            userData.displayName = newName;
+            userData.discord = newDiscord;
+            
+            localStorage.setItem('stumbleUser', JSON.stringify(userData));
+            updateUserIcon(userData);
+            
+            alert('Perfil atualizado com sucesso! ✓');
+            showUserProfile();
+        }
+    </script>
+</body>
+</html>
+
+
+    <!-- Chat ao vivo -->
+    <button class="chat-button" onclick="toggleChat()">💬</button>
+    <div class="chat-box" id="chatBox">
+        <div class="chat-header">
+            💬 Chat Público
+            <button class="chat-close" onclick="toggleChat()">×</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div style="text-align: center; color: #999; padding: 20px;">Carregando...</div>
+        </div>
+        <div class="chat-input-container">
+            <input type="text" id="chatInput" class="chat-input" placeholder="Digite sua mensagem..." maxlength="500">
+            <button class="chat-send" onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+
+    <script src="chat.js"></script>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stumble Hit</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🎮</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-text">
+                <span class="logo-stumble">STUMBLE</span>
+                <span class="logo-hit">HIT</span>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">JOGAR</a></li>
+            <li><a href="loja.html">LOJA</a></li>
+            <li><a href="#hub">HUB</a></li>
+            <li><a href="#criadores">CRIADORES</a></li>
+            <li><a href="#novidades">NOVIDADES E DICAS</a></li>
+        </ul>
+        <div class="user-icon" onclick="window.location.href='login.html'">👤</div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <a href="download.html" class="play-button" style="text-decoration: none; display: inline-block;">JOGA JÁ</a>
+        </div>
+    </section>
+
+    <div class="cookie-banner" id="cookieBanner">
+        <button class="close-btn" onclick="closeCookieBanner()">×</button>
+        <p>Ao clicar em "Aceitar todos os cookies", você concorda com o armazenamento de cookies no site.</p>
+        <button class="accept-btn" onclick="acceptCookies()">Aceitar todos os cookies</button>
+        <button class="settings-btn" onclick="cookieSettings()">Definições de cookies</button>
+    </div>
+
+    <div class="signature">Made by: b7</div>
+
+    <!-- Chat ao vivo -->
+    <button class="chat-button" onclick="toggleChat()">💬</button>
+    <div class="chat-box" id="chatBox">
+        <div class="chat-header">
+            💬 Chat Público
+            <button class="chat-close" onclick="toggleChat()">×</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div style="text-align: center; color: #999; padding: 20px;">Carregando...</div>
+        </div>
+        <div class="chat-input-container">
+            <input type="text" id="chatInput" class="chat-input" placeholder="Digite sua mensagem..." maxlength="500">
+            <button class="chat-send" onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="chat.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

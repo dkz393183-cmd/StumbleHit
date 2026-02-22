@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download - Stumble Hit</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🎮</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .download-container {
+            max-width: 800px;
+            margin: 120px auto 50px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            border: 5px solid #000;
+        }
+
+        .download-title {
+            text-align: center;
+            font-size: 48px;
+            color: #FF6B9D;
+            text-shadow: 4px 4px 0 #000;
+            margin-bottom: 40px;
+        }
+
+        .download-item {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 20px;
+            border: 4px solid #000;
+            box-shadow: 0 8px 0 #000;
+            transition: all 0.2s;
+        }
+
+        .download-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 13px 0 #000;
+        }
+
+        .download-item:active {
+            transform: translateY(2px);
+            box-shadow: 0 6px 0 #000;
+        }
+
+        .download-label {
+            color: #FFE600;
+            font-size: 28px;
+            text-shadow: 3px 3px 0 #000;
+            margin-bottom: 15px;
+        }
+
+        .download-link {
+            display: block;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            word-break: break-all;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .download-button {
+            background: linear-gradient(180deg, #00FF00, #00CC00);
+            color: white;
+            border: 4px solid #000;
+            padding: 15px 40px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 15px;
+            text-shadow: 3px 3px 0 #000;
+            box-shadow: 0 6px 0 #000;
+            transition: all 0.1s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .download-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 9px 0 #000;
+        }
+
+        .download-button:active {
+            transform: translateY(2px);
+            box-shadow: 0 4px 0 #000;
+        }
+
+        .back-button {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .back-link {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 20px;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+        }
+
+        .back-link:hover {
+            color: #FF6B9D;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-text">
+                <span class="logo-stumble">STUMBLE</span>
+                <span class="logo-hit">HIT</span>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">JOGAR</a></li>
+            <li><a href="loja.html">LOJA</a></li>
+            <li><a href="#hub">HUB</a></li>
+            <li><a href="#criadores">CRIADORES</a></li>
+            <li><a href="#novidades">NOVIDADES E DICAS</a></li>
+        </ul>
+        <div class="user-icon" onclick="window.location.href='login.html'">👤</div>
+    </nav>
+
+    <div class="download-container">
+        <h1 class="download-title">BAIXAR STUMBLE HIT</h1>
+
+        <div class="download-item">
+            <div class="download-label">📦 DLL</div>
+            <div class="download-link">https://www.mediafire.com/file/156ke63owswvhqr/StumbleHit.dll/file</div>
+            <a href="https://www.mediafire.com/file/156ke63owswvhqr/StumbleHit.dll/file" target="_blank" class="download-button">
+                BAIXAR DLL
+            </a>
+        </div>
+
+        <div class="download-item">
+            <div class="download-label">📁 FOLDER</div>
+            <div class="download-link">https://www.mediafire.com/file/7pdw1qb9ayraxdw/StumbleHit.zip/file</div>
+            <a href="https://www.mediafire.com/file/7pdw1qb9ayraxdw/StumbleHit.zip/file" target="_blank" class="download-button">
+                BAIXAR FOLDER
+            </a>
+        </div>
+
+        <div class="back-button">
+            <a href="index.html" class="back-link">← Voltar para o início</a>
+        </div>
+    </div>
+
+    <div class="signature">Made by: b7</div>
+
+    <!-- Modal de Autenticação -->
+    <div id="authModal" class="modal">
+        <div class="modal-content" style="max-width: 450px;">
+            <span class="close-modal" onclick="closeAuthModal()">&times;</span>
+            
+            <!-- Formulário de Login -->
+            <div id="loginForm">
+                <h2 class="modal-title">🔐 Entrar</h2>
+                
+                <div style="margin-bottom: 20px;">
+                    <input type="email" id="loginEmail" placeholder="Email" style="width: 100%; padding: 15px; border: 3px solid #000; border-radius: 10px; font-size: 16px; margin-bottom: 15px; font-family: 'Lilita One', cursive;">
+                    <input type="password" id="loginPassword" placeholder="Senha" style="width: 100%; padding: 15px; border: 3px solid #000; border-radius: 10px; font-size: 16px; font-family: 'Lilita One', cursive;">
+                </div>
+
+                <button onclick="loginWithEmail()" style="width: 100%; background: linear-gradient(180deg, #00FF7F, #32CD32); color: white; border: 3px solid #000; padding: 15px; font-size: 20px; font-weight: bold; cursor: pointer; border-radius: 12px; margin-bottom: 15px; font-family: 'Lilita One', cursive; text-shadow: 2px 2px 0 #000;">
+                    ✓ Entrar
+                </button>
+
+                <div style="text-align: center; margin: 20px 0; color: #666;">ou</div>
+
+                <button onclick="loginWithGoogle()" style="width: 100%; background: white; color: #333; border: 3px solid #000; padding: 15px; font-size: 18px; font-weight: bold; cursor: pointer; border-radius: 12px; margin-bottom: 15px; font-family: 'Lilita One', cursive; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <img src="https://www.google.com/favicon.ico" style="width: 20px; height: 20px;">
+                    Entrar com Google
+                </button>
+
+                <p style="text-align: center; color: #666; margin-top: 20px;">
+                    Não tem conta? <a href="#" onclick="showSignup(); return false;" style="color: #667eea; font-weight: bold;">Cadastre-se</a>
+                </p>
+            </div>
+
+            <!-- Formulário de Cadastro -->
+            <div id="signupForm" style="display: none;">
+                <h2 class="modal-title">📝 Criar Conta</h2>
+                
+                <div style="margin-bottom: 20px;">
+                    <input type="text" id="signupName" placeholder="Nome" style="width: 100%; padding: 15px; border: 3px solid #000; border-radius: 10px; font-size: 16px; margin-bottom: 15px; font-family: 'Lilita One', cursive;">
+                    <input type="email" id="signupEmail" placeholder="Email" style="width: 100%; padding: 15px; border: 3px solid #000; border-radius: 10px; font-size: 16px; margin-bottom: 15px; font-family: 'Lilita One', cursive;">
+                    <input type="password" id="signupPassword" placeholder="Senha (mín. 6 caracteres)" style="width: 100%; padding: 15px; border: 3px solid #000; border-radius: 10px; font-size: 16px; margin-bottom: 15px; font-family: 'Lilita One', cursive;">
+                    <input type="password" id="signupConfirmPassword" placeholder="Confirmar Senha" style="width: 100%; padding: 15px; border: 3px solid #000; border-radius: 10px; font-size: 16px; font-family: 'Lilita One', cursive;">
+                </div>
+
+                <button onclick="signupWithEmail()" style="width: 100%; background: linear-gradient(180deg, #FFE600, #FF9500); color: white; border: 3px solid #000; padding: 15px; font-size: 20px; font-weight: bold; cursor: pointer; border-radius: 12px; margin-bottom: 15px; font-family: 'Lilita One', cursive; text-shadow: 2px 2px 0 #000;">
+                    ✓ Criar Conta
+                </button>
+
+                <p style="text-align: center; color: #666; margin-top: 20px;">
+                    Já tem conta? <a href="#" onclick="showLogin(); return false;" style="color: #667eea; font-weight: bold;">Entrar</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+</html>
+
+
+    <!-- Chat ao vivo -->
+    <button class="chat-button" onclick="toggleChat()">💬</button>
+    <div class="chat-box" id="chatBox">
+        <div class="chat-header">
+            💬 Chat Público
+            <button class="chat-close" onclick="toggleChat()">×</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div style="text-align: center; color: #999; padding: 20px;">Carregando...</div>
+        </div>
+        <div class="chat-input-container">
+            <input type="text" id="chatInput" class="chat-input" placeholder="Digite sua mensagem..." maxlength="500">
+            <button class="chat-send" onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+
+    <script src="chat.js"></script>
