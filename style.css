@@ -144,7 +144,7 @@ body {
 .hero {
     margin-top: 70px;
     height: 500px;
-    background: linear-gradient(135deg, #FF6B9D 0%, #C06C84 50%, #6C5B7B 100%);
+    background: url('https://cdn.cloudflare.steamstatic.com/steam/apps/1677740/header.jpg') center/cover no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -155,26 +155,18 @@ body {
 .hero::before {
     content: '';
     position: absolute;
-    width: 200%;
-    height: 200%;
-    background: repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 10px,
-        rgba(255,255,255,0.1) 10px,
-        rgba(255,255,255,0.1) 20px
-    );
-    animation: slide 20s linear infinite;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 1;
 }
 
-@keyframes slide {
-    0% { transform: translate(0, 0); }
-    100% { transform: translate(50px, 50px); }
-}
 
 .hero-content {
     position: relative;
-    z-index: 1;
+    z-index: 2;
 }
 
 .play-button {
