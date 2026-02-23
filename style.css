@@ -131,6 +131,17 @@ body.allow-scroll {
     filter: drop-shadow(2px 2px 0 #000) drop-shadow(0 0 15px #FFD700);
 }
 
+.discord-icon {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    filter: drop-shadow(2px 2px 0 #000);
+}
+
+.discord-icon:hover {
+    transform: scale(1.2);
+    filter: drop-shadow(2px 2px 0 #000) drop-shadow(0 0 15px #5865F2);
+}
+
 .hero {
     margin-top: 70px;
     height: calc(100vh - 70px);
