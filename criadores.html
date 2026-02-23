@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criadores - Stumble Hit</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🎮</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #FF6B9D 0%, #C06C84 50%, #6C5B7B 100%);
+            overflow-x: hidden;
+        }
+
+        .creators-container {
+            margin-top: 100px;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .creators-title {
+            font-size: 48px;
+            color: white;
+            text-shadow: 4px 4px 0 #000;
+            margin-bottom: 50px;
+            background: linear-gradient(180deg, #FFE600, #FF9500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(3px 3px 0 #000);
+        }
+
+        .creators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .creator-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .creator-card:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .creator-card:nth-child(3) {
+            animation-delay: 1s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .creator-hexagon {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .creator-hexagon:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .hexagon-outer {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #FFE5B4, #D4AF37);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+
+        .hexagon-inner {
+            width: 90%;
+            height: 90%;
+            background: linear-gradient(135deg, #F5F5DC, #E5E5CA);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hexagon-photo {
+            width: 85%;
+            height: 85%;
+            background: #333;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+        }
+
+        .creator-name {
+            font-size: 28px;
+            color: white;
+            text-shadow: 3px 3px 0 #000;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .creator-link {
+            background: linear-gradient(180deg, #FF1493, #C71585);
+            color: white;
+            padding: 10px 25px;
+            border: 3px solid #000;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            text-shadow: 2px 2px 0 #000;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .creator-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+            background: linear-gradient(180deg, #FF69B4, #FF1493);
+        }
+
+        .tiktok-icon {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-text">
+                <span class="logo-stumble">STUMBLE</span>
+                <span class="logo-hit">HIT</span>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">JOGAR</a></li>
+            <li><a href="loja.html">LOJA</a></li>
+            <li><a href="#hub">HUB</a></li>
+            <li><a href="criadores.html" class="active">CRIADORES</a></li>
+            <li><a href="#novidades">NOVIDADES E DICAS</a></li>
+        </ul>
+        <div class="user-icon" onclick="window.location.href='login.html'">👤</div>
+    </nav>
+
+    <div class="creators-container">
+        <h1 class="creators-title">STUMBLE CREATORS</h1>
+        
+        <div class="creators-grid">
+            <!-- Creator 1: ez -->
+            <div class="creator-card">
+                <div class="creator-hexagon">
+                    <div class="hexagon-outer">
+                        <div class="hexagon-inner">
+                            <div class="hexagon-photo">
+                                🎮
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="creator-name">EZ</div>
+                <a href="https://www.tiktok.com/@ez.sg7" target="_blank" class="creator-link">
+                    <span class="tiktok-icon">🎵</span>
+                    TikTok
+                </a>
+            </div>
+
+            <!-- Creator 2: guigui -->
+            <div class="creator-card">
+                <div class="creator-hexagon">
+                    <div class="hexagon-outer">
+                        <div class="hexagon-inner">
+                            <div class="hexagon-photo">
+                                🎯
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="creator-name">GUIGUI</div>
+                <a href="https://www.tiktok.com/@guigui.sg7" target="_blank" class="creator-link">
+                    <span class="tiktok-icon">🎵</span>
+                    TikTok
+                </a>
+            </div>
+
+            <!-- Creator 3: di.bel22 -->
+            <div class="creator-card">
+                <div class="creator-hexagon">
+                    <div class="hexagon-outer">
+                        <div class="hexagon-inner">
+                            <div class="hexagon-photo">
+                                ⭐
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="creator-name">DI.BEL22</div>
+                <a href="https://www.tiktok.com/@di.bel226" target="_blank" class="creator-link">
+                    <span class="tiktok-icon">🎵</span>
+                    TikTok
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="signature">Made by: b7</div>
+
+    <!-- Chat ao vivo -->
+    <button class="chat-button" onclick="toggleChat()">💬</button>
+    <div class="chat-box" id="chatBox">
+        <div class="chat-header">
+            💬 Chat Público
+            <button class="chat-close" onclick="toggleChat()">×</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div style="text-align: center; color: #999; padding: 20px;">Carregando...</div>
+        </div>
+        <div class="chat-input-container">
+            <input type="text" id="chatInput" class="chat-input" placeholder="Digite sua mensagem..." maxlength="500">
+            <button class="chat-send" onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module" src="firebase-config.js"></script>
+    
+    <script src="auth.js"></script>
+    <script src="chat.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
