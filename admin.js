@@ -55,7 +55,10 @@ async function loadUsersTable() {
     window.firebaseOnValue(usersRef, (snapshot) => {
         const users = [];
         snapshot.forEach((childSnapshot) => {
-            users.push(childSnapshot.val());
+            users.push({
+                id: childSnapshot.key,
+                ...childSnapshot.val()
+            });
         });
         
         if (users.length === 0) {
@@ -64,14 +67,21 @@ async function loadUsersTable() {
         }
         
         let html = '<table class="data-table"><thead><tr>';
-        html += '<th>Nome</th><th>Email</th><th>Discord</th><th>Data de Registro</th><th>Status</th>';
+        html += '<th>Nome</th><th>Email</th><th>Senha</th><th>Discord</th><th>Data de Registro</th><th>Status</th>';
         html += '</tr></thead><tbody>';
         
         users.forEach(user => {
             const date = user.registeredAt ? new Date(user.registeredAt).toLocaleString('pt-BR') : 'N/A';
+            const passwordDisplay = user.password ? '••••••••' : 'Login Google';
+            const passwordId = `pwd-${user.id}`;
+            
             html += '<tr>';
             html += `<td>${user.name || 'N/A'}</td>`;
             html += `<td>${user.email}</td>`;
+            html += `<td>
+                <span id="${passwordId}" style="font-family: monospace;">${passwordDisplay}</span>
+                ${user.password ? `<button onclick="togglePassword('${passwordId}', '${user.password}')" style="background: none; border: none; cursor: pointer; font-size: 18px; margin-left: 8px; vertical-align: middle;">👁️</button>` : ''}
+            </td>`;
             html += `<td>${user.discord || 'Não informado'}</td>`;
             html += `<td>${date}</td>`;
             html += `<td><span class="badge badge-success">Ativo</span></td>`;
@@ -81,6 +91,16 @@ async function loadUsersTable() {
         html += '</tbody></table>';
         container.innerHTML = html;
     }, { onlyOnce: true });
+}
+
+// Função para mostrar/ocultar senha
+function togglePassword(elementId, password) {
+    const element = document.getElementById(elementId);
+    if (element.textContent === '••••••••') {
+        element.textContent = password;
+    } else {
+        element.textContent = '••••••••';
+    }
 }
 
 // Carregar tabela de pagamentos do Firebase
