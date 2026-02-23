@@ -171,6 +171,9 @@ body.allow-scroll {
     text-shadow: 4px 4px 0 #000;
     box-shadow: 0 10px 0 #000, 0 15px 30px rgba(0,0,0,0.4);
     transition: all 0.1s;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .play-button:hover {
@@ -181,16 +184,6 @@ body.allow-scroll {
 .play-button:active {
     transform: translateY(4px);
     box-shadow: 0 6px 0 #000;
-}
-
-.play-button:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 13px 0 #000;
-}
-
-.play-button:active {
-    transform: translateY(4px);
-    box-shadow: 0 4px 0 #000;
 }
 
 .banner {
@@ -663,13 +656,9 @@ body.allow-scroll {
 
 .logo-hit-big {
     font-size: 80px;
-    background: linear-gradient(180deg, #FFE600, #FF9500);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: 5px 5px 0 #000;
+    color: #000;
+    text-shadow: 5px 5px 0 #FFE600;
     letter-spacing: 5px;
-    filter: drop-shadow(5px 5px 0 #000);
     animation: bounce 2s ease-in-out infinite;
     animation-delay: 0.2s;
 }
