@@ -7,9 +7,11 @@
 
 body {
     font-family: 'Lilita One', cursive;
-    overflow-x: hidden;
+    overflow: hidden;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-    min-height: 100vh;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
 }
 
 .navbar {
@@ -144,7 +146,7 @@ body {
 .hero {
     margin-top: 70px;
     height: calc(100vh - 70px);
-    background: url('https://cdn.cloudflare.steamstatic.com/steam/apps/1677740/header.jpg') center/cover no-repeat;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -159,7 +161,8 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.3);
+    background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
     z-index: 1;
 }
 
