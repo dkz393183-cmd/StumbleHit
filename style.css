@@ -12,6 +12,8 @@ body {
     height: 100vh;
     margin: 0;
     padding: 0;
+    max-width: 100vw;
+    overflow-x: hidden;
 }
 
 body.allow-scroll {
@@ -319,12 +321,64 @@ body.allow-scroll {
 
 @media (max-width: 768px) {
     .navbar {
-        padding: 15px 20px;
+        padding: 10px 15px !important;
+        height: auto !important;
+        flex-wrap: nowrap !important;
+        justify-content: space-between !important;
+    }
+    
+    .logo {
+        flex-shrink: 0;
+    }
+    
+    .logo-stumble, .logo-hit {
+        font-size: 18px !important;
     }
     
     .nav-links {
-        gap: 15px;
-        font-size: 12px;
+        gap: 8px !important;
+        font-size: 12px !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        flex: 1;
+        padding: 0 10px;
+    }
+    
+    .nav-links a {
+        padding: 5px 8px !important;
+        font-size: 12px !important;
+        border: 2px solid #000 !important;
+    }
+    
+    .discord-icon img {
+        width: 35px !important;
+        height: 35px !important;
+    }
+    
+    .user-icon img {
+        width: 45px !important;
+        height: 45px !important;
+    }
+    
+    .hero {
+        margin-top: 70px !important;
+        height: calc(100vh - 70px) !important;
+        padding: 20px !important;
+    }
+    
+    .hero-logo img {
+        max-width: 90% !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .logo-subtitle {
+        font-size: 14px !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .play-button {
+        padding: 15px 40px !important;
+        font-size: 22px !important;
     }
     
     .banner-content {
@@ -333,6 +387,102 @@ body.allow-scroll {
     
     .banner-text h2 {
         font-size: 24px;
+    }
+    
+    .chat-box {
+        width: calc(100% - 40px) !important;
+        height: 400px !important;
+    }
+    
+    .chat-button {
+        bottom: 70px !important;
+        left: 15px !important;
+        width: 50px !important;
+        height: 50px !important;
+        font-size: 24px !important;
+    }
+    
+    .signature {
+        font-size: 10px !important;
+        padding: 3px 8px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 8px 10px !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 10px;
+    }
+    
+    .logo {
+        order: 1;
+    }
+    
+    .nav-links {
+        order: 2;
+        width: 100% !important;
+        gap: 5px !important;
+        margin: 5px 0 !important;
+    }
+    
+    .nav-links a {
+        padding: 4px 6px !important;
+        font-size: 11px !important;
+    }
+    
+    div[style*="display: flex"] {
+        order: 3;
+        gap: 10px !important;
+    }
+    
+    .logo-stumble, .logo-hit {
+        font-size: 16px !important;
+    }
+    
+    .discord-icon img {
+        width: 30px !important;
+        height: 30px !important;
+    }
+    
+    .user-icon img {
+        width: 35px !important;
+        height: 35px !important;
+    }
+    
+    .hero {
+        margin-top: 120px !important;
+        height: calc(100vh - 120px) !important;
+    }
+    
+    .hero-logo img {
+        max-width: 95% !important;
+    }
+    
+    .logo-subtitle {
+        font-size: 12px !important;
+        padding: 0 10px !important;
+    }
+    
+    .play-button {
+        padding: 12px 30px !important;
+        font-size: 18px !important;
+    }
+    
+    .chat-box {
+        width: calc(100% - 20px) !important;
+        height: 350px !important;
+        left: 10px !important;
+        bottom: 10px !important;
+    }
+    
+    .chat-button {
+        width: 45px !important;
+        height: 45px !important;
+        font-size: 20px !important;
+        bottom: 60px !important;
+        left: 10px !important;
     }
 }
 
@@ -727,5 +877,144 @@ body.allow-scroll {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+
+/* Responsividade adicional para loja e outras páginas */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        max-width: 95%;
+        padding: 15px;
+        margin: 10px;
+    }
+    
+    .close-modal {
+        font-size: 30px;
+        top: 5px;
+        right: 10px;
+    }
+    
+    .item-card, .package-card, .gems-card {
+        width: calc(50% - 10px);
+        margin: 5px;
+    }
+    
+    .item-price, .package-price, .gems-price {
+        font-size: 18px;
+        padding: 8px 15px;
+    }
+    
+    .buy-button {
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .item-card, .package-card, .gems-card {
+        width: 100%;
+        margin: 5px 0;
+    }
+    
+    .modal-content {
+        width: 98%;
+        padding: 10px;
+    }
+    
+    h1, h2 {
+        font-size: 24px;
+    }
+    
+    h3 {
+        font-size: 18px;
+    }
+}
+
+/* Responsividade para tabelas admin */
+@media (max-width: 768px) {
+    .data-table {
+        font-size: 12px;
+    }
+    
+    .data-table th,
+    .data-table td {
+        padding: 8px 5px;
+    }
+    
+    .stat-card {
+        min-width: 150px;
+    }
+    
+    .stat-number {
+        font-size: 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .data-table {
+        font-size: 10px;
+        display: block;
+        overflow-x: auto;
+    }
+    
+    .stat-card {
+        min-width: 120px;
+        padding: 15px;
+    }
+    
+    .stat-number {
+        font-size: 24px;
+    }
+    
+    .stat-label {
+        font-size: 12px;
+    }
+}
+
+/* Responsividade para página de criadores */
+@media (max-width: 768px) {
+    .creator-card {
+        width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 480px) {
+    .creator-card {
+        width: 100%;
+        margin: 10px 0;
+    }
+}
+
+/* Ajustes gerais para mobile */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+    
+    .cookie-banner {
+        max-width: calc(100% - 40px);
+        left: 10px;
+        bottom: 10px;
+        padding: 15px;
+    }
+    
+    .accept-btn, .settings-btn {
+        padding: 10px 18px;
+        font-size: 14px;
+    }
+}
+
+/* Landscape mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero {
+        height: auto;
+        min-height: 100vh;
+        padding: 20px;
+    }
+    
+    .navbar {
+        height: auto;
     }
 }
