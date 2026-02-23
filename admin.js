@@ -17,26 +17,30 @@ async function loadStats() {
     const paymentsRef = window.firebaseRef(window.firebaseDB, 'payments');
     const messagesRef = window.firebaseRef(window.firebaseDB, 'chat/messages');
     
-    let usersCount = 0;
-    let paymentsCount = 0;
-    let messagesCount = 0;
+    console.log('Carregando estatísticas do Firebase...');
     
     // Contar usuários
     window.firebaseOnValue(usersRef, (snapshot) => {
-        usersCount = snapshot.size || 0;
-        document.getElementById('totalUsers').textContent = usersCount;
+        let count = 0;
+        snapshot.forEach(() => count++);
+        console.log('Total de usuários:', count);
+        document.getElementById('totalUsers').textContent = count;
     }, { onlyOnce: true });
     
     // Contar pagamentos
     window.firebaseOnValue(paymentsRef, (snapshot) => {
-        paymentsCount = snapshot.size || 0;
-        document.getElementById('totalPayments').textContent = paymentsCount;
+        let count = 0;
+        snapshot.forEach(() => count++);
+        console.log('Total de pagamentos:', count);
+        document.getElementById('totalPayments').textContent = count;
     }, { onlyOnce: true });
     
     // Contar mensagens
     window.firebaseOnValue(messagesRef, (snapshot) => {
-        messagesCount = snapshot.size || 0;
-        document.getElementById('totalMessages').textContent = messagesCount;
+        let count = 0;
+        snapshot.forEach(() => count++);
+        console.log('Total de mensagens:', count);
+        document.getElementById('totalMessages').textContent = count;
     }, { onlyOnce: true });
     
     const currentUser = localStorage.getItem('stumbleUser');

@@ -187,63 +187,90 @@ async function signupWithEmail() {
     }, { onlyOnce: true });
 }
 
-// Login com Google (OAuth real)
-function loginWithGoogle() {
-    // Configurar OAuth do Google
-    const clientId = ''; // Você pode deixar vazio ou adicionar seu Client ID
-    
-    // Se não tiver Client ID configurado, usar popup simulado
-    if (!clientId) {
-        // Abrir popup de autenticação do Google
-        const width = 500;
-        const height = 600;
-        const left = (screen.width / 2) - (width / 2);
-        const top = (screen.height / 2) - (height / 2);
-        
-        const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
-            `client_id=YOUR_CLIENT_ID&` +
-            `redirect_uri=${encodeURIComponent(window.location.origin + '/login.html')}&` +
-            `response_type=token&` +
-            `scope=email profile`;
-        
-        // Por enquanto, mostrar instruções
-        const useRealGoogle = confirm(
-            '🔧 Para usar login real com Google:\n\n' +
-            '1. Acesse: https://console.cloud.google.com\n' +
-            '2. Crie um projeto\n' +
-            '3. Ative a API do Google+\n' +
-            '4. Crie credenciais OAuth 2.0\n\n' +
-            'Quer fazer login de teste agora?'
-        );
-        
-        if (useRealGoogle) {
-            // Simular login com Google
-            const mockGoogleUser = {
-                displayName: prompt('Digite seu nome:', 'Usuário Google') || 'Usuário Google',
-                email: prompt('Digite seu email:', 'usuario@gmail.com') || 'usuario@gmail.com',
-                photoURL: 'https://lh3.googleusercontent.com/a/default-user'
-            };
-            
-            localStorage.setItem('stumbleUser', JSON.stringify(mockGoogleUser));
-            updateUserIcon(mockGoogleUser);
-            
-            // Se estiver na página de login, mostrar perfil
-            if (window.location.pathname.includes('login.html')) {
-                if (typeof showUserProfile === 'function') {
-                    showUserProfile();
-                } else {
-                    window.location.href = 'index.html';
-                }
-            } else {
-                closeAuthModal();
-                alert('Login realizado com sucesso! 🎉');
-            }
-        }
+// Firebase já está configurado no firebase-config.js
+
+// Login com Google usando Firebase Authentication
+async function loginWithGoogle() {
+    // Verificar se Firebase está carregado
+    if (!window.firebaseApp) {
+        alert('Aguarde, carregando...');
+        setTimeout(loginWithGoogle, 500);
         return;
     }
     
-    // Se tiver Client ID, usar OAuth real
-    window.open(googleAuthUrl, 'Google Login', `width=${width},height=${height},top=${top},left=${left}`);
+    try {
+        // Importar Firebase Auth dinamicamente
+        const { getAuth, signInWithPopup, GoogleAuthProvider } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js');
+        
+        const auth = getAuth(window.firebaseApp);
+        const provider = new GoogleAuthProvider();
+        
+        // Fazer login com popup do Google
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        
+        // Salvar dados do usuário
+        const userData = {
+            displayName: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+            registeredAt: Date.now()
+        };
+        
+        // Salvar no Firebase Database
+        const usersRef = window.firebaseRef(window.firebaseDB, 'users');
+        
+        // Verificar se usuário já existe
+        let userExists = false;
+        await new Promise((resolve) => {
+            window.firebaseOnValue(usersRef, (snapshot) => {
+                snapshot.forEach((childSnapshot) => {
+                    if (childSnapshot.val().email === user.email) {
+                        userExists = true;
+                    }
+                });
+                resolve();
+            }, { onlyOnce: true });
+        });
+        
+        // Se não existe, criar novo usuário
+        if (!userExists) {
+            const newUserRef = window.firebasePush(usersRef);
+            await window.firebaseSet(newUserRef, {
+                name: user.displayName,
+                email: user.email,
+                photoURL: user.photoURL,
+                registeredAt: Date.now()
+            });
+        }
+        
+        // Salvar sessão local
+        localStorage.setItem('stumbleUser', JSON.stringify(userData));
+        updateUserIcon(userData);
+        
+        // Se estiver na página de login, mostrar perfil
+        if (window.location.pathname.includes('login.html')) {
+            if (typeof showUserProfile === 'function') {
+                showUserProfile();
+            } else {
+                window.location.href = 'index.html';
+            }
+        } else {
+            closeAuthModal();
+            alert('Login realizado com sucesso! 🎉');
+        }
+        
+    } catch (error) {
+        console.error('Erro no login:', error);
+        
+        if (error.code === 'auth/popup-closed-by-user') {
+            alert('Login cancelado.');
+        } else if (error.code === 'auth/popup-blocked') {
+            alert('Popup bloqueado! Permita popups para este site.');
+        } else {
+            alert('Erro ao fazer login com Google. Tente novamente.');
+        }
+    }
 }
 
 // Mostrar perfil do usuário
@@ -353,7 +380,7 @@ function uploadModalPhoto() {
 }
 
 // Salvar perfil do modal
-function saveProfileModal() {
+async function saveProfileModal() {
     const newName = document.getElementById('modalEditName').value.trim();
     const newDiscord = document.getElementById('modalEditDiscord').value.trim();
     
@@ -366,8 +393,29 @@ function saveProfileModal() {
     userData.displayName = newName;
     userData.discord = newDiscord;
     
+    // Atualizar no localStorage
     localStorage.setItem('stumbleUser', JSON.stringify(userData));
     updateUserIcon(userData);
+    
+    // Atualizar no Firebase
+    if (window.firebaseDB) {
+        const usersRef = window.firebaseRef(window.firebaseDB, 'users');
+        
+        // Encontrar e atualizar o usuário no Firebase
+        window.firebaseOnValue(usersRef, async (snapshot) => {
+            snapshot.forEach((childSnapshot) => {
+                const user = childSnapshot.val();
+                if (user.email === userData.email) {
+                    const userRef = window.firebaseRef(window.firebaseDB, `users/${childSnapshot.key}`);
+                    window.firebaseSet(userRef, {
+                        ...user,
+                        name: newName,
+                        discord: newDiscord
+                    });
+                }
+            });
+        }, { onlyOnce: true });
+    }
     
     alert('Perfil atualizado com sucesso! ✓');
     showUserProfile();

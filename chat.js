@@ -217,7 +217,10 @@ async function deleteMessage(messageId, event) {
 
 // Enviar mensagem para Firebase
 async function sendMessage() {
+    console.log('sendMessage chamado');
+    
     const user = JSON.parse(localStorage.getItem('stumbleUser'));
+    console.log('Usuário:', user);
     
     if (!user) {
         alert('Você precisa estar logado para enviar mensagens!');
@@ -228,10 +231,19 @@ async function sendMessage() {
     const input = document.getElementById('chatInput');
     const message = input.value.trim();
     
+    console.log('Mensagem:', message);
+    
     if (!message) return;
     
     if (message.length > 500) {
         alert('Mensagem muito longa! Máximo 500 caracteres.');
+        return;
+    }
+    
+    if (!window.firebaseDB) {
+        console.error('Firebase não inicializado!');
+        alert('Aguarde, carregando...');
+        setTimeout(() => sendMessage(), 1000);
         return;
     }
     
@@ -245,18 +257,26 @@ async function sendMessage() {
         replyTo: replyingTo ? replyingTo.id : null
     };
     
-    // Salvar no Firebase
-    const messagesRef = window.firebaseRef(window.firebaseDB, 'chat/messages');
-    await window.firebasePush(messagesRef, newMessage);
+    console.log('Nova mensagem:', newMessage);
     
-    input.value = '';
-    cancelReply();
-    
-    // Scroll para o final
-    setTimeout(() => {
-        const container = document.getElementById('chatMessages');
-        container.scrollTop = container.scrollHeight;
-    }, 100);
+    try {
+        // Salvar no Firebase
+        const messagesRef = window.firebaseRef(window.firebaseDB, 'chat/messages');
+        await window.firebasePush(messagesRef, newMessage);
+        console.log('Mensagem salva no Firebase!');
+        
+        input.value = '';
+        cancelReply();
+        
+        // Scroll para o final
+        setTimeout(() => {
+            const container = document.getElementById('chatMessages');
+            container.scrollTop = container.scrollHeight;
+        }, 100);
+    } catch (error) {
+        console.error('Erro ao salvar mensagem:', error);
+        alert('Erro ao enviar mensagem. Tente novamente.');
+    }
 }
 
 // Funções removidas - Firebase faz tudo automaticamente em tempo real!
