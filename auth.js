@@ -70,7 +70,7 @@ function showLogin() {
 }
 
 // Login com email e senha
-function loginWithEmail() {
+async function loginWithEmail() {
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
 
@@ -79,33 +79,52 @@ function loginWithEmail() {
         return;
     }
 
-    // Verificar credenciais (simulado - em produção use Firebase)
-    const users = JSON.parse(localStorage.getItem('stumbleUsers') || '[]');
-    const user = users.find(u => u.email === email && u.password === password);
-
-    if (user) {
-        const userData = {
-            displayName: user.name,
-            email: user.email,
-            photoURL: null
-        };
-        localStorage.setItem('stumbleUser', JSON.stringify(userData));
-        updateUserIcon(userData);
-        
-        // Se estiver na página de login, mostrar perfil
-        if (window.location.pathname.includes('login.html')) {
-            if (typeof showUserProfile === 'function') {
-                showUserProfile();
-            } else {
-                window.location.href = 'index.html';
-            }
-        } else {
-            closeAuthModal();
-            alert('Login realizado com sucesso! 🎉');
-        }
-    } else {
-        alert('Email ou senha incorretos!');
+    // Verificar se Firebase está disponível
+    if (!window.firebaseDB) {
+        alert('Aguarde, carregando...');
+        setTimeout(loginWithEmail, 500);
+        return;
     }
+
+    // Buscar usuário no Firebase
+    const usersRef = window.firebaseRef(window.firebaseDB, 'users');
+    
+    window.firebaseOnValue(usersRef, (snapshot) => {
+        let userFound = false;
+        
+        snapshot.forEach((childSnapshot) => {
+            const user = childSnapshot.val();
+            if (user.email === email && user.password === password) {
+                userFound = true;
+                
+                const userData = {
+                    displayName: user.name,
+                    email: user.email,
+                    discord: user.discord || '',
+                    photoURL: user.photoURL || null
+                };
+                
+                localStorage.setItem('stumbleUser', JSON.stringify(userData));
+                updateUserIcon(userData);
+                
+                // Se estiver na página de login, mostrar perfil
+                if (window.location.pathname.includes('login.html')) {
+                    if (typeof showUserProfile === 'function') {
+                        showUserProfile();
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                } else {
+                    closeAuthModal();
+                    alert('Login realizado com sucesso! 🎉');
+                }
+            }
+        });
+        
+        if (!userFound) {
+            alert('Email ou senha incorretos!');
+        }
+    }, { onlyOnce: true });
 }
 
 // Cadastro com email e senha

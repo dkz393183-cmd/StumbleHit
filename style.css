@@ -643,7 +643,7 @@ body.allow-scroll {
 /* Hero Logo Styles */
 .hero-logo {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     animation: fadeInDown 1s ease-out;
 }
 
@@ -668,7 +668,8 @@ body.allow-scroll {
     font-size: 20px;
     color: white;
     text-shadow: 3px 3px 0 #000;
-    margin-top: 20px;
+    margin-top: 10px;
+    margin-bottom: 20px;
     animation: pulse 2s ease-in-out infinite;
 }
 
