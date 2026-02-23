@@ -27,12 +27,18 @@ function openPaymentModal(itemName, itemPrice) {
     // Reset para mostrar opções de pagamento
     document.getElementById('paymentOptions').style.display = 'block';
     document.getElementById('pixDetails').style.display = 'none';
+    document.getElementById('purchaseComplete').style.display = 'none';
     
     // Gerar QR Code
     generateQRCode();
+}
+
+function completePurchase() {
+    // Esconder detalhes do PIX
+    document.getElementById('pixDetails').style.display = 'none';
     
-    // Registrar tentativa de pagamento
-    logPaymentAttempt(itemName, itemPrice);
+    // Mostrar tela de conclusão
+    document.getElementById('purchaseComplete').style.display = 'block';
 }
 
 function closePaymentModal() {
@@ -42,6 +48,11 @@ function closePaymentModal() {
 function selectPix() {
     document.getElementById('paymentOptions').style.display = 'none';
     document.getElementById('pixDetails').style.display = 'block';
+    
+    // Registrar tentativa de pagamento
+    const itemName = document.getElementById('modalItemName').textContent;
+    const itemPrice = document.getElementById('modalItemPrice').textContent;
+    logPaymentAttempt(itemName, itemPrice);
 }
 
 function showQRCode() {

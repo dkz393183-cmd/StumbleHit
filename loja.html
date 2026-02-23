@@ -540,6 +540,31 @@
                     <div class="pix-key-text" id="pixKeyText">00020101021126330014br.gov.bcb.pix0111557611058705204000053039865802BR5917BRUNO R A CORREIA6009SAO PAULO62070503***6304E7C4</div>
                     <button class="copy-button" id="copyBtn" onclick="copyPixKey()">📋 Copiar Chave</button>
                 </div>
+                
+                <button onclick="completePurchase()" style="width: 100%; background: linear-gradient(180deg, #00FF7F, #32CD32); color: white; border: 3px solid #000; padding: 15px; font-size: 20px; font-weight: bold; cursor: pointer; border-radius: 12px; margin-top: 20px; font-family: 'Lilita One', cursive; text-shadow: 2px 2px 0 #000;">
+                    ✓ CONCLUIR COMPRA
+                </button>
+            </div>
+            
+            <!-- Tela de Compra Concluída -->
+            <div id="purchaseComplete" class="pix-details" style="display: none;">
+                <div style="text-align: center; padding: 20px;">
+                    <div style="font-size: 80px; margin-bottom: 20px;">✅</div>
+                    <h2 style="color: #00FF7F; margin-bottom: 20px; text-shadow: 2px 2px 0 #000;">Pagamento Realizado!</h2>
+                    
+                    <div style="background: #f0f0f0; padding: 20px; border-radius: 15px; border: 3px solid #000; margin-bottom: 20px;">
+                        <p style="font-size: 18px; color: #333; margin-bottom: 15px; font-weight: bold;">📱 Próximo Passo:</p>
+                        <p style="font-size: 16px; color: #666; margin-bottom: 10px;">Chame no Discord:</p>
+                        <div style="background: #5865F2; color: white; padding: 15px; border-radius: 10px; border: 3px solid #000; font-size: 24px; font-weight: bold; margin-bottom: 15px;">
+                            fuckb7
+                        </div>
+                        <p style="font-size: 14px; color: #666;">Envie o comprovante de pagamento para receber seu item!</p>
+                    </div>
+                    
+                    <button onclick="closePaymentModal()" style="width: 100%; background: linear-gradient(180deg, #667eea, #764ba2); color: white; border: 3px solid #000; padding: 15px; font-size: 18px; font-weight: bold; cursor: pointer; border-radius: 12px; font-family: 'Lilita One', cursive; text-shadow: 2px 2px 0 #000;">
+                        OK, ENTENDI!
+                    </button>
+                </div>
             </div>
         </div>
     </div>
