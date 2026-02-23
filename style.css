@@ -33,6 +33,7 @@ body.allow-scroll {
     top: 0;
     z-index: 1000;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    height: 70px;
 }
 
 @keyframes gradientShift {

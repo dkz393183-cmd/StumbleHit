@@ -191,84 +191,122 @@ async function signupWithEmail() {
 
 // Login com Google usando Firebase Authentication
 async function loginWithGoogle() {
-    // Verificar se Firebase está carregado
-    if (!window.firebaseApp) {
-        alert('Aguarde, carregando...');
-        setTimeout(loginWithGoogle, 500);
-        return;
-    }
-    
     try {
+        // Mostrar loading
+        const loadingDiv = document.createElement('div');
+        loadingDiv.id = 'googleLoginLoading';
+        loadingDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 15px; border: 5px solid #000; z-index: 10000; text-align: center; font-family: "Lilita One", cursive;';
+        loadingDiv.innerHTML = '<div style="font-size: 24px; color: #667eea; margin-bottom: 10px;">🔄 Redirecionando...</div><div style="color: #666;">Você será redirecionado para o Google</div>';
+        document.body.appendChild(loadingDiv);
+        
+        // Aguardar um pouco para garantir que Firebase carregou
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
         // Importar Firebase Auth dinamicamente
-        const { getAuth, signInWithPopup, GoogleAuthProvider } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js');
+        const { getAuth, signInWithRedirect, GoogleAuthProvider } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js');
         
         const auth = getAuth(window.firebaseApp);
         const provider = new GoogleAuthProvider();
         
-        // Fazer login com popup do Google
-        const result = await signInWithPopup(auth, provider);
-        const user = result.user;
-        
-        // Salvar dados do usuário
-        const userData = {
-            displayName: user.displayName,
-            email: user.email,
-            photoURL: user.photoURL,
-            registeredAt: Date.now()
-        };
-        
-        // Salvar no Firebase Database
-        const usersRef = window.firebaseRef(window.firebaseDB, 'users');
-        
-        // Verificar se usuário já existe
-        let userExists = false;
-        await new Promise((resolve) => {
-            window.firebaseOnValue(usersRef, (snapshot) => {
-                snapshot.forEach((childSnapshot) => {
-                    if (childSnapshot.val().email === user.email) {
-                        userExists = true;
-                    }
-                });
-                resolve();
-            }, { onlyOnce: true });
-        });
-        
-        // Se não existe, criar novo usuário
-        if (!userExists) {
-            const newUserRef = window.firebasePush(usersRef);
-            await window.firebaseSet(newUserRef, {
-                name: user.displayName,
-                email: user.email,
-                photoURL: user.photoURL,
-                registeredAt: Date.now()
-            });
-        }
-        
-        // Salvar sessão local
-        localStorage.setItem('stumbleUser', JSON.stringify(userData));
-        updateUserIcon(userData);
-        
-        // Se estiver na página de login, mostrar perfil
-        if (window.location.pathname.includes('login.html')) {
-            if (typeof showUserProfile === 'function') {
-                showUserProfile();
-            } else {
-                window.location.href = 'index.html';
-            }
-        } else {
-            closeAuthModal();
-            alert('Login realizado com sucesso! 🎉');
-        }
+        // Fazer login com redirect do Google
+        await signInWithRedirect(auth, provider);
         
     } catch (error) {
         console.error('Erro no login:', error);
         
-        if (error.code === 'auth/popup-closed-by-user') {
-            alert('Login cancelado.');
-        } else if (error.code === 'auth/popup-blocked') {
-            alert('Popup bloqueado! Permita popups para este site.');
-        } else {
-            alert('Erro ao fazer login com Google. Tente novamente.');
+        // Remover loading
+        const loading = document.getElementById('googleLoginLoading');
+        if (loading) loading.remove();
+        
+        alert('Erro ao fazer login com Google. Verifique se você está acessando o site via HTTP/HTTPS (não file://)');
+    }
+}
+
+// Verificar resultado do redirect ao carregar a página
+async function checkGoogleRedirect() {
+    try {
+        // Aguardar Firebase carregar
+        await new Promise(resolve => {
+            const checkFirebase = setInterval(() => {
+                if (window.firebaseApp) {
+                    clearInterval(checkFirebase);
+                    resolve();
+                }
+            }, 100);
+            
+            // Timeout após 5 segundos
+            setTimeout(() => {
+                clearInterval(checkFirebase);
+                resolve();
+            }, 5000);
+        });
+        
+        if (!window.firebaseApp) {
+            console.log('Firebase não carregou a tempo');
+            return;
+        }
+        
+        const { getAuth, getRedirectResult } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js');
+        
+        const auth = getAuth(window.firebaseApp);
+        const result = await getRedirectResult(auth);
+        
+        if (result && result.user) {
+            const user = result.user;
+            
+            // Salvar dados do usuário
+            const userData = {
+                displayName: user.displayName,
+                email: user.email,
+                photoURL: user.photoURL,
+                registeredAt: Date.now()
+            };
+            
+            // Salvar no Firebase Database
+            const usersRef = window.firebaseRef(window.firebaseDB, 'users');
+            
+            // Verificar se usuário já existe
+            let userExists = false;
+            await new Promise((resolve) => {
+                window.firebaseOnValue(usersRef, (snapshot) => {
+                    snapshot.forEach((childSnapshot) => {
+                        if (childSnapshot.val().email === user.email) {
+                            userExists = true;
+                        }
+                    });
+                    resolve();
+                }, { onlyOnce: true });
+            });
+            
+            // Se não existe, criar novo usuário
+            if (!userExists) {
+                const newUserRef = window.firebasePush(usersRef);
+                await window.firebaseSet(newUserRef, {
+                    name: user.displayName,
+                    email: user.email,
+                    photoURL: user.photoURL,
+                    registeredAt: Date.now()
+                });
+            }
+            
+            // Salvar sessão local
+            localStorage.setItem('stumbleUser', JSON.stringify(userData));
+            updateUserIcon(userData);
+            
+            // Se estiver na página de login, mostrar perfil
+            if (window.location.pathname.includes('login.html')) {
+                if (typeof showUserProfile === 'function') {
+                    showUserProfile();
+                } else {
+                    window.location.href = 'index.html';
+                }
+            } else {
+                alert('Login realizado com sucesso! 🎉');
+            }
+        }
+    } catch (error) {
+        if (error.code !== 'auth/popup-closed-by-user') {
+            console.error('Erro ao verificar redirect:', error);
         }
     }
 }
@@ -431,7 +469,10 @@ function logout() {
 }
 
 // Verificar autenticação ao carregar a página
-window.addEventListener('load', checkAuth);
+window.addEventListener('load', () => {
+    checkAuth();
+    checkGoogleRedirect();
+});
 
 // Fechar modal ao clicar fora
 window.onclick = function(event) {

@@ -111,7 +111,7 @@
 </head>
 <body class="allow-scroll">
     <nav class="navbar">
-        <div class="logo">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
             <div class="logo-text">
                 <span class="logo-stumble">STUMBLE</span>
                 <span class="logo-hit">HIT</span>
@@ -124,7 +124,9 @@
             <li><a href="criadores.html">CRIADORES</a></li>
         </ul>
         </ul>
-        <div class="user-icon" onclick="window.location.href='login.html'">👤</div>
+        <div class="user-icon" onclick="window.location.href='login.html'">
+            <img src="https://i.imgur.com/df7HRmi.png" alt="Login" style="width: 65px; height: 65px; border-radius: 50%;">
+        </div>
     </nav>
 
     <div class="download-container">
@@ -152,58 +154,6 @@
     </div>
 
     <div class="signature">Made by: b7</div>
-
-    <!-- Modal de Autenticação -->
-    <div id="authModal" class="modal">
-        <div class="modal-content" style="max-width: 450px;">
-            <span class="close-modal" onclick="closeAuthModal()">&times;</span>
-            
-            <!-- Formulário de Login -->
-            <div id="loginForm">
-                <h2 class="modal-title">🔐 Entrar</h2>
-                
-                <div style="margin-bottom: 20px;">
-                    <input type="email" id="loginEmail" placeholder="Email" style="width: 100%; padding: 15px; border: 3px solid #000; border-radius: 10px; font-size: 16px; margin-bottom: 15px; font-family: 'Lilita One', cursive;">
-                    <input type="password" id="loginPassword" placeholder="Senha" style="width: 100%; padding: 15px; border: 3px solid #000; border-radius: 10px; font-size: 16px; font-family: 'Lilita One', cursive;">
-                </div>
-
-                <button onclick="loginWithEmail()" style="width: 100%; background: linear-gradient(180deg, #00FF7F, #32CD32); color: white; border: 3px solid #000; padding: 15px; font-size: 20px; font-weight: bold; cursor: pointer; border-radius: 12px; margin-bottom: 15px; font-family: 'Lilita One', cursive; text-shadow: 2px 2px 0 #000;">
-                    ✓ Entrar
-                </button>
-
-                <div style="text-align: center; margin: 20px 0; color: #666;">ou</div>
-
-                <button onclick="loginWithGoogle()" style="width: 100%; background: white; color: #333; border: 3px solid #000; padding: 15px; font-size: 18px; font-weight: bold; cursor: pointer; border-radius: 12px; margin-bottom: 15px; font-family: 'Lilita One', cursive; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                    <img src="https://www.google.com/favicon.ico" style="width: 20px; height: 20px;">
-                    Entrar com Google
-                </button>
-
-                <p style="text-align: center; color: #666; margin-top: 20px;">
-                    Não tem conta? <a href="#" onclick="showSignup(); return false;" style="color: #667eea; font-weight: bold;">Cadastre-se</a>
-                </p>
-            </div>
-
-            <!-- Formulário de Cadastro -->
-            <div id="signupForm" style="display: none;">
-                <h2 class="modal-title">📝 Criar Conta</h2>
-                
-                <div style="margin-bottom: 20px;">
-                    <input type="text" id="signupName" placeholder="Nome" style="width: 100%; padding: 15px; border: 3px solid #000; border-radius: 10px; font-size: 16px; margin-bottom: 15px; font-family: 'Lilita One', cursive;">
-                    <input type="email" id="signupEmail" placeholder="Email" style="width: 100%; padding: 15px; border: 3px solid #000; border-radius: 10px; font-size: 16px; margin-bottom: 15px; font-family: 'Lilita One', cursive;">
-                    <input type="password" id="signupPassword" placeholder="Senha (mín. 6 caracteres)" style="width: 100%; padding: 15px; border: 3px solid #000; border-radius: 10px; font-size: 16px; margin-bottom: 15px; font-family: 'Lilita One', cursive;">
-                    <input type="password" id="signupConfirmPassword" placeholder="Confirmar Senha" style="width: 100%; padding: 15px; border: 3px solid #000; border-radius: 10px; font-size: 16px; font-family: 'Lilita One', cursive;">
-                </div>
-
-                <button onclick="signupWithEmail()" style="width: 100%; background: linear-gradient(180deg, #FFE600, #FF9500); color: white; border: 3px solid #000; padding: 15px; font-size: 20px; font-weight: bold; cursor: pointer; border-radius: 12px; margin-bottom: 15px; font-family: 'Lilita One', cursive; text-shadow: 2px 2px 0 #000;">
-                    ✓ Criar Conta
-                </button>
-
-                <p style="text-align: center; color: #666; margin-top: 20px;">
-                    Já tem conta? <a href="#" onclick="showLogin(); return false;" style="color: #667eea; font-weight: bold;">Entrar</a>
-                </p>
-            </div>
-        </div>
-    </div>
 
     <!-- Firebase SDK -->
     <script type="module" src="firebase-config.js"></script>

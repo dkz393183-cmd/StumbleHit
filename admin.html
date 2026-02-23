@@ -219,7 +219,7 @@
 </head>
 <body class="allow-scroll">
     <nav class="navbar">
-        <div class="logo">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
             <div class="logo-text">
                 <span class="logo-stumble">STUMBLE</span>
                 <span class="logo-hit">HIT</span>
@@ -232,7 +232,9 @@
             <li><a href="criadores.html">CRIADORES</a></li>
             <li><a href="admin.html" class="active">ADMIN</a></li>
         </ul>
-        <div class="user-icon" onclick="window.location.href='login.html'">👤</div>
+        <div class="user-icon" onclick="window.location.href='login.html'">
+            <img src="https://i.imgur.com/df7HRmi.png" alt="Login" style="width: 65px; height: 65px; border-radius: 50%;">
+        </div>
     </nav>
 
     <div class="admin-container" id="adminContent" style="display: none;">
