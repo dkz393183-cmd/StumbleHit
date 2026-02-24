@@ -9,6 +9,7 @@ async function loadDashboard() {
     await loadUsersTable();
     await loadPaymentsTable();
     await loadMessagesTable();
+    await loadCookiesTable();
 }
 
 // Carregar estatísticas do Firebase
@@ -351,3 +352,69 @@ setInterval(() => {
 
 // Carregar ao iniciar - removido pois agora é chamado após login
 // window.addEventListener('load', loadDashboard);
+
+
+// Carregar tabela de cookies do Firebase
+async function loadCookiesTable() {
+    const cookiesRef = window.firebaseRef(window.firebaseDB, 'cookies');
+    const container = document.getElementById('cookiesTableContainer');
+    
+    window.firebaseOnValue(cookiesRef, (snapshot) => {
+        const cookies = [];
+        snapshot.forEach((childSnapshot) => {
+            cookies.push(childSnapshot.val());
+        });
+        
+        if (cookies.length === 0) {
+            container.innerHTML = '<div class="no-data">Nenhum cookie aceito ainda</div>';
+            return;
+        }
+        
+        let html = '<table class="data-table"><thead><tr>';
+        html += '<th>Usuário</th><th>Email</th><th>Data/Hora</th>';
+        html += '</tr></thead><tbody>';
+        
+        cookies.forEach(cookie => {
+            const date = new Date(cookie.acceptedAt).toLocaleString('pt-BR');
+            html += '<tr>';
+            html += `<td>${cookie.userName}</td>`;
+            html += `<td>${cookie.userEmail}</td>`;
+            html += `<td>${date}</td>`;
+            html += '</tr>';
+        });
+        
+        html += '</tbody></table>';
+        container.innerHTML = html;
+    }, { onlyOnce: true });
+}
+
+// Exportar cookies para CSV
+async function exportCookies() {
+    const cookiesRef = window.firebaseRef(window.firebaseDB, 'cookies');
+    
+    window.firebaseOnValue(cookiesRef, (snapshot) => {
+        const cookies = [];
+        snapshot.forEach((childSnapshot) => {
+            cookies.push(childSnapshot.val());
+        });
+        
+        let csv = 'Usuário,Email,Data/Hora\n';
+        
+        cookies.forEach(cookie => {
+            const date = new Date(cookie.acceptedAt).toLocaleString('pt-BR');
+            csv += `"${cookie.userName}","${cookie.userEmail}","${date}"\n`;
+        });
+        
+        downloadCSV(csv, 'cookies.csv');
+    }, { onlyOnce: true });
+}
+
+// Limpar cookies do Firebase
+async function clearCookies() {
+    if (confirm('Tem certeza que deseja limpar todos os cookies aceitos?')) {
+        const cookiesRef = window.firebaseRef(window.firebaseDB, 'cookies');
+        await window.firebaseSet(cookiesRef, null);
+        loadDashboard();
+        alert('Cookies removidos!');
+    }
+}

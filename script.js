@@ -1,20 +1,24 @@
-function closeCookieBanner() {
-    document.getElementById('cookieBanner').style.display = 'none';
-}
-
-function acceptCookies() {
+// Cookies - Salvar no Firebase quando aceitar
+async function acceptCookies() {
     localStorage.setItem('cookiesAccepted', 'true');
-    closeCookieBanner();
-}
-
-function cookieSettings() {
-    alert('Configurações de cookies - Aqui você pode personalizar suas preferências');
+    
+    // Salvar no Firebase se estiver disponível
+    if (window.firebaseDB) {
+        const user = localStorage.getItem('stumbleUser');
+        if (user) {
+            const userData = JSON.parse(user);
+            const cookiesRef = window.firebaseRef(window.firebaseDB, 'cookies');
+            await window.firebasePush(cookiesRef, {
+                userEmail: userData.email,
+                userName: userData.displayName,
+                acceptedAt: Date.now()
+            });
+        }
+    }
 }
 
 window.onload = function() {
-    if (localStorage.getItem('cookiesAccepted')) {
-        closeCookieBanner();
-    }
+    // Cookies já foram removidos da interface
 }
 
 // Menu Mobile
