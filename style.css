@@ -1086,7 +1086,7 @@ body.allow-scroll {
     background: linear-gradient(180deg, #FF6B9D, #C06C84);
 }
 
-/* Mostrar apenas em mobile */
+/* Mostrar em todas as resoluções */
 @media (max-width: 768px) {
     .hamburger-menu {
         display: flex !important;
@@ -1099,19 +1099,28 @@ body.allow-scroll {
     .mobile-menu-overlay {
         display: block !important;
     }
+    
+    /* Esconder navbar normal em mobile */
+    .nav-links {
+        display: none !important;
+    }
+    
+    div[style*="display: flex"][style*="gap: 15px"] {
+        display: none !important;
+    }
 }
 
-/* Esconder em desktop */
+/* Mostrar também em desktop */
 @media (min-width: 769px) {
     .hamburger-menu {
-        display: none !important;
+        display: flex !important;
     }
     
     .mobile-menu {
-        display: none !important;
+        display: block !important;
     }
     
     .mobile-menu-overlay {
-        display: none !important;
+        display: block !important;
     }
 }
