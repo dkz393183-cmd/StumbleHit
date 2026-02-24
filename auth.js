@@ -18,9 +18,9 @@ function updateUserIcon(userData) {
     const userIcons = document.querySelectorAll('.user-icon');
     userIcons.forEach(userIcon => {
         if (userData.photoURL) {
-            userIcon.innerHTML = `<img src="${userData.photoURL}" alt="User" style="width: 35px; height: 35px; border-radius: 50%; border: 2px solid #000; cursor: pointer;">`;
+            userIcon.innerHTML = `<img src="${userData.photoURL}" alt="User" style="width: 65px; height: 65px; border-radius: 50%; border: 2px solid #000; cursor: pointer;">`;
         } else {
-            userIcon.innerHTML = `<div style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; border: 2px solid #000; color: white; font-size: 18px; cursor: pointer;">${userData.displayName.charAt(0)}</div>`;
+            userIcon.innerHTML = `<div style="width: 65px; height: 65px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; border: 2px solid #000; color: white; font-size: 28px; cursor: pointer;">${userData.displayName.charAt(0)}</div>`;
         }
         userIcon.onclick = function() { window.location.href = 'login.html'; };
     });
