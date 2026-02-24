@@ -24,6 +24,11 @@ function updateUserIcon(userData) {
         }
         userIcon.onclick = function() { window.location.href = 'login.html'; };
     });
+    
+    // Atualizar botão do menu mobile
+    if (typeof updateMobileLoginButton === 'function') {
+        updateMobileLoginButton();
+    }
 }
 
 // Abrir modal de login
@@ -483,6 +488,12 @@ function logout() {
     if (confirm('Tem certeza que deseja sair?')) {
         localStorage.removeItem('stumbleUser');
         localStorage.removeItem('stumbleUserLastActive');
+        
+        // Atualizar botão do menu mobile
+        if (typeof updateMobileLoginButton === 'function') {
+            updateMobileLoginButton();
+        }
+        
         location.reload();
     }
 }

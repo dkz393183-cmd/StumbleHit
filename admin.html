@@ -244,6 +244,21 @@
         </div>
     </nav>
 
+    <!-- Menu Hambúrguer Mobile -->
+    <div class="hamburger-menu" onclick="toggleMobileMenu()">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+    </div>
+
+    <div class="mobile-menu-overlay" onclick="toggleMobileMenu()"></div>
+    
+    <div class="mobile-menu">
+        <a href="javascript:void(0)" onclick="handleMobileLogin()" class="mobile-menu-item" id="mobileLoginBtn">FAZER LOGIN</a>
+        <a href="loja.html" class="mobile-menu-item">PRODUTOS</a>
+        <a href="https://discord.gg/sghit" target="_blank" class="mobile-menu-item">COMUNIDADE</a>
+    </div>
+
     <div class="admin-container" id="adminContent" style="display: none;">
         <div class="admin-header">
             <h1 class="admin-title">🎮 Admin Dashboard</h1>

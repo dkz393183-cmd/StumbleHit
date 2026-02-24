@@ -145,7 +145,7 @@
         }
     </style>
 </head>
-<body>
+<body class="allow-scroll">
     <nav class="navbar">
         <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
             <div class="logo-text">
@@ -170,6 +170,21 @@
             </div>
         </div>
     </nav>
+
+    <!-- Menu Hambúrguer Mobile -->
+    <div class="hamburger-menu" onclick="toggleMobileMenu()">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+    </div>
+
+    <div class="mobile-menu-overlay" onclick="toggleMobileMenu()"></div>
+    
+    <div class="mobile-menu">
+        <a href="javascript:void(0)" onclick="handleMobileLogin()" class="mobile-menu-item" id="mobileLoginBtn">FAZER LOGIN</a>
+        <a href="loja.html" class="mobile-menu-item">PRODUTOS</a>
+        <a href="https://discord.gg/sghit" target="_blank" class="mobile-menu-item">COMUNIDADE</a>
+    </div>
 
     <div class="creators-container">
         <h1 class="creators-title">STUMBLE CREATORS</h1>
