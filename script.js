@@ -23,9 +23,11 @@ function toggleMobileMenu() {
     const overlay = document.querySelector('.mobile-menu-overlay');
     const hamburger = document.querySelector('.hamburger-menu');
     
-    menu.classList.toggle('active');
-    overlay.classList.toggle('active');
-    hamburger.classList.toggle('active');
+    if (menu && overlay && hamburger) {
+        menu.classList.toggle('active');
+        overlay.classList.toggle('active');
+        hamburger.classList.toggle('active');
+    }
 }
 
 // Atualizar botão de login no menu mobile
@@ -47,33 +49,31 @@ function handleMobileLogin() {
     const user = localStorage.getItem('stumbleUser');
     
     // Fechar menu mobile
-    toggleMobileMenu();
+    const menu = document.querySelector('.mobile-menu');
+    const overlay = document.querySelector('.mobile-menu-overlay');
+    const hamburger = document.querySelector('.hamburger-menu');
     
-    if (user) {
-        // Se estiver logado, mostrar perfil
-        if (window.location.pathname.includes('login.html')) {
-            if (typeof showUserProfile === 'function') {
-                showUserProfile();
-            }
+    if (menu && overlay && hamburger) {
+        menu.classList.remove('active');
+        overlay.classList.remove('active');
+        hamburger.classList.remove('active');
+    }
+    
+    // Pequeno delay para a animação de fechamento
+    setTimeout(() => {
+        if (user) {
+            // Se estiver logado, ir para página de login que mostra o perfil
+            window.location.href = 'login.html';
         } else {
+            // Se não estiver logado, ir para página de login
             window.location.href = 'login.html';
         }
-    } else {
-        // Se não estiver logado, abrir modal de login
-        if (window.location.pathname.includes('login.html')) {
-            // Já está na página de login, apenas rolar para o topo
-            window.scrollTo(0, 0);
-        } else {
-            // Abrir modal de login se existir
-            if (typeof openAuthModal === 'function') {
-                openAuthModal();
-            } else {
-                // Se não tiver modal, ir para página de login
-                window.location.href = 'login.html';
-            }
-        }
-    }
+    }, 300);
 }
 
 // Atualizar botão ao carregar a página
-window.addEventListener('load', updateMobileLoginButton);
+if (typeof window !== 'undefined') {
+    window.addEventListener('load', function() {
+        updateMobileLoginButton();
+    });
+}

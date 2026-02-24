@@ -327,37 +327,21 @@ body.allow-scroll {
         justify-content: space-between !important;
     }
     
+    /* Esconder navbar normal em mobile */
+    .nav-links {
+        display: none !important;
+    }
+    
+    div[style*="display: flex"][style*="gap: 15px"] {
+        display: none !important;
+    }
+    
     .logo {
         flex-shrink: 0;
     }
     
     .logo-stumble, .logo-hit {
         font-size: 18px !important;
-    }
-    
-    .nav-links {
-        gap: 8px !important;
-        font-size: 12px !important;
-        flex-wrap: wrap !important;
-        justify-content: center !important;
-        flex: 1;
-        padding: 0 10px;
-    }
-    
-    .nav-links a {
-        padding: 5px 8px !important;
-        font-size: 12px !important;
-        border: 2px solid #000 !important;
-    }
-    
-    .discord-icon img {
-        width: 35px !important;
-        height: 35px !important;
-    }
-    
-    .user-icon img {
-        width: 45px !important;
-        height: 45px !important;
     }
     
     .hero {
@@ -411,49 +395,15 @@ body.allow-scroll {
 @media (max-width: 480px) {
     .navbar {
         padding: 8px 10px !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        gap: 10px;
-    }
-    
-    .logo {
-        order: 1;
-    }
-    
-    .nav-links {
-        order: 2;
-        width: 100% !important;
-        gap: 5px !important;
-        margin: 5px 0 !important;
-    }
-    
-    .nav-links a {
-        padding: 4px 6px !important;
-        font-size: 11px !important;
-    }
-    
-    div[style*="display: flex"] {
-        order: 3;
-        gap: 10px !important;
     }
     
     .logo-stumble, .logo-hit {
         font-size: 16px !important;
     }
     
-    .discord-icon img {
-        width: 30px !important;
-        height: 30px !important;
-    }
-    
-    .user-icon img {
-        width: 35px !important;
-        height: 35px !important;
-    }
-    
     .hero {
-        margin-top: 120px !important;
-        height: calc(100vh - 120px) !important;
+        margin-top: 70px !important;
+        height: calc(100vh - 70px) !important;
     }
     
     .hero-logo img {
@@ -1097,10 +1047,12 @@ body.allow-scroll {
     z-index: 9999;
     opacity: 0;
     transition: opacity 0.3s ease;
+    pointer-events: none;
 }
 
 .mobile-menu-overlay.active {
     opacity: 1;
+    pointer-events: auto;
 }
 
 .mobile-menu-item {
@@ -1134,16 +1086,32 @@ body.allow-scroll {
     background: linear-gradient(180deg, #FF6B9D, #C06C84);
 }
 
+/* Mostrar apenas em mobile */
 @media (max-width: 768px) {
     .hamburger-menu {
-        display: flex;
+        display: flex !important;
     }
     
     .mobile-menu {
-        display: block;
+        display: block !important;
     }
     
     .mobile-menu-overlay {
-        display: block;
+        display: block !important;
+    }
+}
+
+/* Esconder em desktop */
+@media (min-width: 769px) {
+    .hamburger-menu {
+        display: none !important;
+    }
+    
+    .mobile-menu {
+        display: none !important;
+    }
+    
+    .mobile-menu-overlay {
+        display: none !important;
     }
 }
