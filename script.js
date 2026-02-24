@@ -81,3 +81,40 @@ if (typeof window !== 'undefined') {
         updateMobileLoginButton();
     });
 }
+
+
+// Registrar acesso ao site
+async function registerPageView() {
+    // Aguardar Firebase carregar
+    await new Promise(resolve => {
+        const checkFirebase = setInterval(() => {
+            if (window.firebaseDB) {
+                clearInterval(checkFirebase);
+                resolve();
+            }
+        }, 100);
+        
+        // Timeout após 5 segundos
+        setTimeout(() => {
+            clearInterval(checkFirebase);
+            resolve();
+        }, 5000);
+    });
+    
+    if (!window.firebaseDB) return;
+    
+    // Registrar acesso
+    const viewsRef = window.firebaseRef(window.firebaseDB, 'pageViews');
+    await window.firebasePush(viewsRef, {
+        page: window.location.pathname,
+        timestamp: Date.now(),
+        userAgent: navigator.userAgent
+    });
+}
+
+// Registrar acesso ao carregar a página
+if (typeof window !== 'undefined') {
+    window.addEventListener('load', function() {
+        registerPageView();
+    });
+}

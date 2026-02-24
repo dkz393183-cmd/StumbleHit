@@ -17,6 +17,7 @@ async function loadStats() {
     const usersRef = window.firebaseRef(window.firebaseDB, 'users');
     const paymentsRef = window.firebaseRef(window.firebaseDB, 'payments');
     const messagesRef = window.firebaseRef(window.firebaseDB, 'chat/messages');
+    const viewsRef = window.firebaseRef(window.firebaseDB, 'pageViews');
     
     console.log('Carregando estatísticas do Firebase...');
     
@@ -42,6 +43,14 @@ async function loadStats() {
         snapshot.forEach(() => count++);
         console.log('Total de mensagens:', count);
         document.getElementById('totalMessages').textContent = count;
+    }, { onlyOnce: true });
+    
+    // Contar acessos
+    window.firebaseOnValue(viewsRef, (snapshot) => {
+        let count = 0;
+        snapshot.forEach(() => count++);
+        console.log('Total de acessos:', count);
+        document.getElementById('totalViews').textContent = count;
     }, { onlyOnce: true });
     
     const currentUser = localStorage.getItem('stumbleUser');
