@@ -183,6 +183,7 @@ async function signupWithEmail() {
             name: name,
             email: email,
             password: password,
+            discord: '',
             registeredAt: Date.now()
         };
         await window.firebaseSet(newUserRef, userData);
@@ -191,6 +192,7 @@ async function signupWithEmail() {
         const userSession = {
             displayName: name,
             email: email,
+            discord: '',
             photoURL: null,
             registeredAt: Date.now()
         };
@@ -465,15 +467,18 @@ async function saveProfileModal() {
         
         // Encontrar e atualizar o usuário no Firebase
         window.firebaseOnValue(usersRef, async (snapshot) => {
-            snapshot.forEach((childSnapshot) => {
+            let updated = false;
+            snapshot.forEach(async (childSnapshot) => {
                 const user = childSnapshot.val();
-                if (user.email === userData.email) {
+                if (user.email === userData.email && !updated) {
+                    updated = true;
                     const userRef = window.firebaseRef(window.firebaseDB, `users/${childSnapshot.key}`);
-                    window.firebaseSet(userRef, {
+                    await window.firebaseSet(userRef, {
                         ...user,
                         name: newName,
                         discord: newDiscord
                     });
+                    console.log('Discord atualizado:', newDiscord);
                 }
             });
         }, { onlyOnce: true });
